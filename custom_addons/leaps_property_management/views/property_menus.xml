@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_property_root"
+            name="إدارة العقارات"
+            sequence="55"
+            action="action_property_dashboard"
+            web_icon="leaps_property_management,static/description/icon.png"/>
+
+        <menuitem id="menu_property_properties"
+            name="العقارات"
+            parent="menu_property_root"
+            sequence="10"/>
+        <menuitem id="menu_property_buildings"
+            name="المباني"
+            parent="menu_property_properties"
+            action="action_property_building"
+            sequence="5"/>
+        <menuitem id="menu_property_units"
+            name="الوحدات العقارية"
+            parent="menu_property_properties"
+            action="action_property_unit"
+            sequence="10"/>
+
+        <menuitem id="menu_property_rental"
+            name="الإيجار"
+            parent="menu_property_root"
+            sequence="20"/>
+        <menuitem id="menu_property_rental_contracts"
+            name="عقود الإيجار"
+            parent="menu_property_rental"
+            action="action_rental_contract"
+            sequence="10"/>
+
+        <menuitem id="menu_property_sales"
+            name="البيع"
+            parent="menu_property_root"
+            sequence="30"/>
+        <menuitem id="menu_property_sales_contracts"
+            name="عقود البيع"
+            parent="menu_property_sales"
+            action="action_sales_contract"
+            sequence="10"/>
+
+        <menuitem id="menu_property_commissions_root"
+            name="العمولات"
+            parent="menu_property_root"
+            sequence="35"/>
+        <menuitem id="menu_property_commissions"
+            name="عمولات REGA والرسوم"
+            parent="menu_property_commissions_root"
+            action="action_property_commission"
+            sequence="10"/>
+
+        <menuitem id="menu_property_maintenance"
+            name="الصيانة"
+            parent="menu_property_root"
+            sequence="40"/>
+        <menuitem id="menu_property_maintenance_requests"
+            name="طلبات الصيانة"
+            parent="menu_property_maintenance"
+            action="action_property_maintenance"
+            sequence="10"/>
+
+        <menuitem id="menu_property_config"
+            name="الإعدادات"
+            parent="menu_property_root"
+            sequence="90"/>
+        <menuitem id="menu_property_amenities"
+            name="المرافق والخدمات"
+            parent="menu_property_config"
+            action="action_property_amenity"
+            sequence="10"/>
+    </data>
+</odoo>

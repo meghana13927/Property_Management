@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Kanban View -->
+    <record id="view_property_building_kanban" model="ir.ui.view">
+        <field name="name">property.building.kanban</field>
+        <field name="model">property.building</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="building_type" class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="building_type"/>
+                <field name="city"/>
+                <field name="unit_count"/>
+                <field name="available_count"/>
+                <field name="rented_count"/>
+                <field name="sold_count"/>
+                <field name="occupancy_rate"/>
+                <field name="image"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="row g-0">
+                            <div t-if="record.image.value" class="col-auto">
+                                <img t-att-src="record.image.value" style="width:64px;height:64px;object-fit:cover;border-radius:4px;margin-right:8px;" alt="مبنى"/>
+                            </div>
+                            <div class="col">
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted small"><field name="building_type"/></div>
+                                <div t-if="record.city.value">
+                                    <i class="fa fa-map-marker" title="المدينة"/> <field name="city"/>
+                                </div>
+                                <div class="mt-1 d-flex gap-2">
+                                    <span class="badge bg-secondary"><field name="unit_count"/> وحدة</span>
+                                    <span class="badge bg-success"><field name="available_count"/> متاح</span>
+                                    <span class="badge bg-info"><field name="rented_count"/> مؤجر</span>
+                                </div>
+                                <!-- Occupancy bar -->
+                                <div class="mt-1" style="background:#e9ecef;border-radius:4px;height:6px;overflow:hidden;">
+                                    <div t-att-style="'background:#875A7B;height:100%;width:' + (record.occupancy_rate.raw_value > 100 ? 100 : record.occupancy_rate.raw_value) + '%;'"/>
+                                </div>
+                                <div class="small text-muted"><field name="occupancy_rate" digits="[5,1]"/>% مشغول</div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- List View -->
+    <record id="view_property_building_list" model="ir.ui.view">
+        <field name="name">property.building.list</field>
+        <field name="model">property.building</field>
+        <field name="arch" type="xml">
+            <list string="المباني">
+                <field name="name"/>
+                <field name="code" optional="show"/>
+                <field name="building_type" widget="badge"/>
+                <field name="city"/>
+                <field name="unit_count"/>
+                <field name="available_count"/>
+                <field name="rented_count"/>
+                <field name="sold_count"/>
+                <field name="occupancy_rate" string="نسبة الإشغال %" digits="[5,1]"/>
+                <field name="owner_id" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_property_building_form" model="ir.ui.view">
+        <field name="name">property.building.form</field>
+        <field name="model">property.building</field>
+        <field name="arch" type="xml">
+            <form string="المبنى">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                            name="action_view_units" icon="fa-building-o">
+                            <field name="unit_count" widget="statinfo" string="الوحدات"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                            name="action_view_units" icon="fa-check-circle-o"
+                            context="{'search_default_available': 1}">
+                            <field name="available_count" widget="statinfo" string="متاح"/>
+                        </button>
+                    </div>
+                    <field name="image" widget="image" class="oe_avatar"
+                        options="{'preview_image': 'image'}"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="اسم المبنى"/></h1>
+                        <h2><field name="building_no" placeholder="رقم المبنى"/></h2>
+                        <div><field name="code" placeholder="كود المبنى"/></div>
+                    </div>
+                    <group>
+                        <group string="تفاصيل المبنى">
+                            <field name="building_type"/>
+                            <field name="developer_id"/>
+                            <field name="owner_id"/>
+                            <field name="total_floors"/>
+                            <field name="year_built"/>
+                            <field name="total_area_sqft"/>
+                        </group>
+                        <group string="الموقع">
+                            <field name="street"/>
+                            <field name="city"/>
+                            <field name="zip_code"/>
+                            <field name="state_id"/>
+                            <field name="country_id"/>
+                        </group>
+                    </group>
+                    <separator string="ملخص الإشغال"/>
+                    <group>
+                        <group string="عدد الوحدات">
+                            <field name="unit_count" readonly="1"/>
+                            <field name="available_count" readonly="1"/>
+                            <field name="rented_count" readonly="1"/>
+                            <field name="sold_count" readonly="1"/>
+                            <field name="booked_count" readonly="1"/>
+                            <field name="maintenance_count" readonly="1"/>
+                        </group>
+                        <group string="الإشغال">
+                            <field name="occupancy_rate" readonly="1" digits="[5,1]"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الوحدات" name="units_page">
+                            <field name="unit_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="unit_type"/>
+                                    <field name="property_type"/>
+                                    <field name="floor"/>
+                                    <field name="unit_number"/>
+                                    <field name="area_sqft"/>
+                                    <field name="bedrooms"/>
+                                    <field name="bathrooms"/>
+                                    <field name="rent_amount"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'available'"
+                                        decoration-info="state == 'rented'"
+                                        decoration-warning="state == 'booked'"
+                                        decoration-danger="state == 'sold'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الوصف" name="description_page">
+                            <field name="description" placeholder="وصف المبنى والميزات والملاحظات..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_property_building_search" model="ir.ui.view">
+        <field name="name">property.building.search</field>
+        <field name="model">property.building</field>
+        <field name="arch" type="xml">
+            <search string="بحث المباني">
+                <field name="name"/>
+                <field name="city"/>
+                <field name="owner_id"/>
+                <field name="developer_id"/>
+                <separator/>
+                <filter string="برج سكني" name="residential_tower"
+                    domain="[('building_type','=','residential_tower')]"/>
+                <filter string="برج تجاري" name="commercial_tower"
+                    domain="[('building_type','=','commercial_tower')]"/>
+                <filter string="مجمع فلل" name="villa_compound"
+                    domain="[('building_type','=','villa_compound')]"/>
+                <filter string="استخدام مختلط" name="mixed_use"
+                    domain="[('building_type','=','mixed_use')]"/>
+                <separator/>
+                <group>
+                    <filter string="المدينة" name="group_city" context="{'group_by': 'city'}"/>
+                    <filter string="نوع المبنى" name="group_type" context="{'group_by': 'building_type'}"/>
+                    <filter string="المالك" name="group_owner" context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_property_building" model="ir.actions.act_window">
+        <field name="name">المباني</field>
+        <field name="res_model">property.building</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أضف أول مبنى</p>
+        </field>
+    </record>
+</odoo>

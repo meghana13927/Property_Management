@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="1">
+
+    <!-- ==================== المرافق / Amenities ==================== -->
+    <record id="amenity_pool" model="property.amenity">
+        <field name="name">مسبح</field>
+        <field name="icon">fa-tint</field>
+    </record>
+    <record id="amenity_gym" model="property.amenity">
+        <field name="name">صالة رياضية</field>
+        <field name="icon">fa-heartbeat</field>
+    </record>
+    <record id="amenity_parking" model="property.amenity">
+        <field name="name">موقف سيارات مغطى</field>
+        <field name="icon">fa-car</field>
+    </record>
+    <record id="amenity_security" model="property.amenity">
+        <field name="name">أمن على مدار الساعة</field>
+        <field name="icon">fa-shield</field>
+    </record>
+    <record id="amenity_concierge" model="property.amenity">
+        <field name="name">خدمة الكونسيرج</field>
+        <field name="icon">fa-user-tie</field>
+    </record>
+    <record id="amenity_garden" model="property.amenity">
+        <field name="name">حديقة خاصة</field>
+        <field name="icon">fa-leaf</field>
+    </record>
+    <record id="amenity_balcony" model="property.amenity">
+        <field name="name">شرفة / تراس</field>
+        <field name="icon">fa-home</field>
+    </record>
+    <record id="amenity_prayer_room" model="property.amenity">
+        <field name="name">مصلى</field>
+        <field name="icon">fa-star</field>
+    </record>
+    <record id="amenity_majlis" model="property.amenity">
+        <field name="name">مجلس</field>
+        <field name="icon">fa-users</field>
+    </record>
+
+    <!-- ==================== المباني / Buildings ==================== -->
+    <record id="building_riyadh_tower" model="property.building">
+        <field name="name">برج الأعمال - الرياض</field>
+        <field name="building_type">residential_tower</field>
+        <field name="city">الرياض</field>
+        <field name="total_floors">20</field>
+        <field name="year_built">2020</field>
+    </record>
+    <record id="building_jeddah_villas" model="property.building">
+        <field name="name">مجمع فلل الروضة - جدة</field>
+        <field name="building_type">villa_compound</field>
+        <field name="city">جدة</field>
+        <field name="total_floors">2</field>
+        <field name="year_built">2018</field>
+    </record>
+
+    <!-- ==================== شركاء العمل - الملاك / Demo Partners (Owners) ==================== -->
+    <record id="partner_owner_mohammed" model="res.partner">
+        <field name="name">محمد بن سعد العتيبي</field>
+        <field name="phone">+966501234567</field>
+        <field name="email">m.alataybi@example.com</field>
+        <field name="city">الرياض</field>
+        <field name="is_company" eval="False"/>
+    </record>
+    <record id="partner_owner_noura" model="res.partner">
+        <field name="name">نورة بنت خالد الغامدي</field>
+        <field name="phone">+966507654321</field>
+        <field name="email">n.alghamdi@example.com</field>
+        <field name="city">جدة</field>
+        <field name="is_company" eval="False"/>
+    </record>
+    <record id="ar_partner_owner_corp" model="res.partner">
+        <field name="name">شركة الخليج للاستثمار العقاري</field>
+        <field name="phone">+966112001234</field>
+        <field name="email">info@gulfrei.sa</field>
+        <field name="city">الرياض</field>
+        <field name="is_company" eval="True"/>
+    </record>
+
+    <!-- ==================== شركاء العمل - المستأجرون والمشترون / Demo Partners (Tenants/Buyers) ==================== -->
+    <record id="partner_tenant_ahmed" model="res.partner">
+        <field name="name">أحمد عبدالله الشمري</field>
+        <field name="phone">+966509876543</field>
+        <field name="email">a.alshammari@example.com</field>
+        <field name="city">الرياض</field>
+        <field name="is_company" eval="False"/>
+    </record>
+    <record id="ar_partner_tenant_sara" model="res.partner">
+        <field name="name">سارة محمد القحطاني</field>
+        <field name="phone">+966558887766</field>
+        <field name="email">s.alqahtani@example.com</field>
+        <field name="city">جدة</field>
+        <field name="is_company" eval="False"/>
+    </record>
+    <record id="partner_buyer_omar" model="res.partner">
+        <field name="name">عمر فهد الدوسري</field>
+        <field name="phone">+966501112233</field>
+        <field name="email">o.aldosari@example.com</field>
+        <field name="city">الدمام</field>
+        <field name="is_company" eval="False"/>
+    </record>
+    <record id="ar_partner_buyer_corp" model="res.partner">
+        <field name="name">مجموعة الأفق للاستثمار</field>
+        <field name="phone">+966114556677</field>
+        <field name="email">invest@ufuq.sa</field>
+        <field name="city">الرياض</field>
+        <field name="is_company" eval="True"/>
+    </record>
+    <record id="partner_tenant_khalid" model="res.partner">
+        <field name="name">خالد سعيد الزهراني</field>
+        <field name="phone">+966556543210</field>
+        <field name="email">k.alzahrani@example.com</field>
+        <field name="city">جدة</field>
+        <field name="is_company" eval="False"/>
+    </record>
+
+    <!-- ==================== الوكيل العقاري / Demo Partner (Agent) ==================== -->
+    <record id="partner_agent_waleed" model="res.partner">
+        <field name="name">وليد ناصر المطيري</field>
+        <field name="phone">+966505551234</field>
+        <field name="city">الرياض</field>
+        <field name="is_company" eval="False"/>
+        <field name="is_property_agent" eval="True"/>
+        <field name="fal_license_no">FAL-12345-R</field>
+    </record>
+
+    <!-- ==================== الوحدات العقارية / Property Units ==================== -->
+
+    <!-- الوحدة 1: شقة 101 - برج الأعمال -->
+    <record id="ar_unit_apt_101" model="property.unit">
+        <field name="name">شقة 101 - برج الأعمال</field>
+        <field name="ref">BA-APT-101</field>
+        <field name="property_type">apartment</field>
+        <field name="state">available</field>
+        <field name="building_id" ref="building_riyadh_tower"/>
+        <field name="floor">10</field>
+        <field name="unit_number">101</field>
+        <field name="city">الرياض</field>
+        <field name="area_sqft">1291.0</field>
+        <field name="bedrooms">3</field>
+        <field name="bathrooms">2</field>
+        <field name="rent_amount">4500</field>
+        <field name="sale_price">650000</field>
+        <field name="security_deposit">9000</field>
+        <field name="owner_id" ref="partner_owner_mohammed"/>
+        <field name="amenity_ids" eval="[(4, ref('amenity_pool')), (4, ref('amenity_gym')), (4, ref('amenity_parking')), (4, ref('amenity_security'))]"/>
+        <field name="notes">&lt;p&gt;شقة واسعة في الطابق العاشر بإطلالة مميزة على المدينة. تضم 3 غرف نوم وصالة رئيسية ومطبخاً حديثاً. تشطيبات فاخرة وأجهزة كهربائية متكاملة. متاحة للإيجار أو البيع.&lt;/p&gt;</field>
+    </record>
+
+    <!-- الوحدة 2: فيلا الروضة 7 - مجمع فلل الروضة -->
+    <record id="unit_villa_7" model="property.unit">
+        <field name="name">فيلا الروضة 7</field>
+        <field name="ref">RD-VILLA-007</field>
+        <field name="property_type">villa</field>
+        <field name="state">rented</field>
+        <field name="building_id" ref="building_jeddah_villas"/>
+        <field name="floor">0</field>
+        <field name="unit_number">7</field>
+        <field name="city">جدة</field>
+        <field name="area_sqft">4844.0</field>
+        <field name="bedrooms">5</field>
+        <field name="bathrooms">5</field>
+        <field name="rent_amount">15000</field>
+        <field name="sale_price">2500000</field>
+        <field name="security_deposit">30000</field>
+        <field name="owner_id" ref="partner_owner_noura"/>
+        <field name="amenity_ids" eval="[(4, ref('amenity_garden')), (4, ref('amenity_pool')), (4, ref('amenity_security')), (4, ref('amenity_concierge'))]"/>
+        <field name="notes">&lt;p&gt;فيلا فاخرة بمساحة 450 متر مربع في مجمع فلل الروضة بجدة. تحتوي على 5 غرف نوم و5 حمامات ومجلس وحديقة خاصة ومسبح. مناسبة للعائلات الكبيرة.&lt;/p&gt;</field>
+    </record>
+
+    <!-- الوحدة 3: مكتب تجاري 305 - الرياض -->
+    <record id="unit_office_305" model="property.unit">
+        <field name="name">مكتب تجاري 305</field>
+        <field name="ref">RY-COMM-305</field>
+        <field name="property_type">commercial</field>
+        <field name="state">booked</field>
+        <field name="floor">3</field>
+        <field name="unit_number">305</field>
+        <field name="city">الرياض</field>
+        <field name="area_sqft">2799.0</field>
+        <field name="bedrooms">0</field>
+        <field name="bathrooms">2</field>
+        <field name="rent_amount">12000</field>
+        <field name="sale_price">1800000</field>
+        <field name="security_deposit">24000</field>
+        <field name="owner_id" ref="ar_partner_owner_corp"/>
+        <field name="amenity_ids" eval="[(4, ref('amenity_parking')), (4, ref('amenity_security'))]"/>
+        <field name="notes">&lt;p&gt;مساحة تجارية متميزة في الطابق الثالث بقلب الرياض التجاري. مساحة مفتوحة قابلة للتقسيم. مناسبة للمكاتب أو صالات العرض. هيكل خام جاهز للتشطيب.&lt;/p&gt;</field>
+    </record>
+
+    <!-- الوحدة 4: مكتب تنفيذي 12B - الرياض -->
+    <record id="unit_office_12b" model="property.unit">
+        <field name="name">مكتب تنفيذي 12B</field>
+        <field name="ref">RY-OFF-012B</field>
+        <field name="property_type">office</field>
+        <field name="state">available</field>
+        <field name="floor">12</field>
+        <field name="unit_number">12B</field>
+        <field name="city">الرياض</field>
+        <field name="area_sqft">947.0</field>
+        <field name="bedrooms">0</field>
+        <field name="bathrooms">2</field>
+        <field name="rent_amount">5500</field>
+        <field name="sale_price">520000</field>
+        <field name="owner_id" ref="ar_partner_owner_corp"/>
+        <field name="amenity_ids" eval="[(4, ref('amenity_parking')), (4, ref('amenity_security')), (4, ref('amenity_concierge'))]"/>
+        <field name="notes">&lt;p&gt;مكتب تنفيذي مجهز بالكامل في الطابق الثاني عشر. يشمل قسمات زجاجية وغرفة اجتماعات وبنية تحتية لشبكة الإنترنت عالي السرعة. مناسب للشركات المتوسطة.&lt;/p&gt;</field>
+    </record>
+
+    <!-- الوحدة 5: بنتهاوس PH1 - برج الأعمال -->
+    <record id="unit_penthouse" model="property.unit">
+        <field name="name">بنتهاوس PH1 - برج الأعمال</field>
+        <field name="ref">BA-PH-001</field>
+        <field name="property_type">apartment</field>
+        <field name="state">sold</field>
+        <field name="building_id" ref="building_riyadh_tower"/>
+        <field name="floor">20</field>
+        <field name="unit_number">PH1</field>
+        <field name="city">الرياض</field>
+        <field name="area_sqft">6243.0</field>
+        <field name="bedrooms">4</field>
+        <field name="bathrooms">5</field>
+        <field name="rent_amount">35000</field>
+        <field name="sale_price">8500000</field>
+        <field name="security_deposit">70000</field>
+        <field name="owner_id" ref="partner_owner_mohammed"/>
+        <field name="amenity_ids" eval="[(4, ref('amenity_pool')), (4, ref('amenity_gym')), (4, ref('amenity_parking')), (4, ref('amenity_security')), (4, ref('amenity_concierge')), (4, ref('amenity_garden')), (4, ref('amenity_balcony')), (4, ref('amenity_prayer_room')), (4, ref('amenity_majlis'))]"/>
+        <field name="notes">&lt;p&gt;بنتهاوس فاخر يمتد على الطابق الأخير من برج الأعمال بإطلالة بانورامية 360 درجة على مدينة الرياض. يشمل مجلساً فاخراً ومصلى خاصاً وتراساً خارجياً واسعاً. نظام منزل ذكي متكامل.&lt;/p&gt;</field>
+    </record>
+
+    <!-- الوحدة 6: استوديو 8A - برج الأعمال -->
+    <record id="unit_studio" model="property.unit">
+        <field name="name">استوديو 8A - برج الأعمال</field>
+        <field name="ref">BA-STD-8A</field>
+        <field name="property_type">apartment</field>
+        <field name="state">available</field>
+        <field name="building_id" ref="building_riyadh_tower"/>
+        <field name="floor">8</field>
+        <field name="unit_number">8A</field>
+        <field name="city">الرياض</field>
+        <field name="area_sqft">581.0</field>
+        <field name="bedrooms">0</field>
+        <field name="bathrooms">1</field>
+        <field name="rent_amount">2800</field>
+        <field name="sale_price">280000</field>
+        <field name="owner_id" ref="partner_owner_noura"/>
+        <field name="amenity_ids" eval="[(4, ref('amenity_pool')), (4, ref('amenity_gym')), (4, ref('amenity_parking'))]"/>
+        <field name="notes">&lt;p&gt;استوديو عصري مناسب للمهنيين والعزاب. في الطابق الثامن بإطلالة جميلة. قريب من المرافق والخدمات. مثالي للسكن الفردي أو الاستثمار العقاري.&lt;/p&gt;</field>
+    </record>
+
+    <!-- ==================== عقود الإيجار / Rental Contracts ==================== -->
+
+</data>
+<!-- Arabic contracts, sales, payment plans, maintenance and commissions — updatable -->
+<data noupdate="0">
+
+    <!-- عقد إيجار نشط - فيلا الروضة 7 -->
+    <record id="ar_rc_villa_active" model="property.rental.contract">
+        <field name="name">RC/2025/0010</field>
+        <field name="unit_id" ref="unit_villa_7"/>
+        <field name="tenant_id" ref="partner_tenant_ahmed"/>
+        <field name="date_start">2025-01-01</field>
+        <field name="date_end">2025-12-31</field>
+        <field name="payment_term">quarterly</field>
+        <field name="security_deposit">30000</field>
+        <field name="admin_fee">1500</field>
+        <field name="state">active</field>
+        <field name="ejar_registration_no">EJAR-2025-JED-00112</field>
+        <field name="ejar_fee">125</field>
+        <field name="vat_applicable" eval="True"/>
+        <field name="notes">&lt;p&gt;&lt;strong&gt;الشروط والأحكام:&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;تم تسجيل العقد على منصة إيجار وفق اشتراطات هيئة العقار السعودية (ريرا).&lt;/li&gt;&lt;li&gt;يتحمل المستأجر فواتير الكهرباء والمياه والخدمات.&lt;/li&gt;&lt;li&gt;لا يحق للمستأجر التأجير من الباطن دون موافقة خطية من المالك.&lt;/li&gt;&lt;li&gt;يشترط إشعار مسبق 90 يوماً في حال عدم التجديد.&lt;/li&gt;&lt;/ul&gt;</field>
+    </record>
+
+    <!-- عقد إيجار مسودة - شقة 101 برج الأعمال -->
+    <record id="ar_rc_apt101_draft" model="property.rental.contract">
+        <field name="name">RC/2026/0010</field>
+        <field name="unit_id" ref="ar_unit_apt_101"/>
+        <field name="tenant_id" ref="ar_partner_tenant_sara"/>
+        <field name="date_start">2026-06-01</field>
+        <field name="date_end">2027-05-31</field>
+        <field name="payment_term">monthly</field>
+        <field name="security_deposit">9000</field>
+        <field name="admin_fee">450</field>
+        <field name="state">draft</field>
+        <field name="notes">&lt;p&gt;مسودة عقد إيجار بانتظار توقيع المستأجرة. الإيجار شامل لرسوم الخدمات المشتركة في البرج. يستلزم التسجيل على منصة إيجار قبل بدء سريان العقد.&lt;/p&gt;</field>
+    </record>
+
+    <!-- عقد إيجار منتهٍ - مكتب تنفيذي -->
+    <record id="ar_rc_office_expired" model="property.rental.contract">
+        <field name="name">RC/2024/0020</field>
+        <field name="unit_id" ref="unit_office_12b"/>
+        <field name="tenant_id" ref="partner_tenant_khalid"/>
+        <field name="date_start">2024-01-01</field>
+        <field name="date_end">2024-12-31</field>
+        <field name="payment_term">biannual</field>
+        <field name="security_deposit">11000</field>
+        <field name="admin_fee">550</field>
+        <field name="state">expired</field>
+        <field name="notes">&lt;p&gt;انتهى العقد وأخلى المستأجر المكتب. جارٍ إجراء الفحص النهائي للوحدة. سيتم رد مبلغ التأمين بعد التحقق من سلامة الوحدة ومطابقتها للحالة الأصلية.&lt;/p&gt;</field>
+    </record>
+
+    <!-- ==================== عقود البيع / Sales Contracts ==================== -->
+
+    <!-- عقد بيع محجوز - مكتب تجاري 305 -->
+    <record id="ar_sc_commercial_booked" model="property.sales.contract">
+        <field name="name">SC/2025/0010</field>
+        <field name="unit_id" ref="unit_office_305"/>
+        <field name="buyer_id" ref="ar_partner_buyer_corp"/>
+        <field name="date_contract">2025-03-15</field>
+        <field name="date_completion">2025-09-30</field>
+        <field name="agreed_price">1750000</field>
+        <field name="booking_amount">175000</field>
+        <field name="down_payment">350000</field>
+        <field name="state">booked</field>
+        <field name="notes">&lt;p&gt;تم استلام طلب الحجز وتأكيده. يتعين توقيع عقد البيع الابتدائي خلال 30 يوماً. المشتري حصل على موافقة مبدئية للتمويل من أحد البنوك السعودية المعتمدة. العقد خاضع لأنظمة هيئة العقار السعودية.&lt;/p&gt;</field>
+    </record>
+
+    <!-- عقد بيع مكتمل - بنتهاوس PH1 -->
+    <record id="ar_sc_penthouse_completed" model="property.sales.contract">
+        <field name="name">SC/2024/0020</field>
+        <field name="unit_id" ref="unit_penthouse"/>
+        <field name="buyer_id" ref="partner_buyer_omar"/>
+        <field name="date_contract">2024-06-01</field>
+        <field name="date_completion">2024-11-30</field>
+        <field name="agreed_price">8200000</field>
+        <field name="booking_amount">820000</field>
+        <field name="down_payment">1640000</field>
+        <field name="state">completed</field>
+        <field name="notes">&lt;p&gt;اكتملت عملية نقل الملكية في وزارة العدل بتاريخ 30 نوفمبر 2024. صدرت صكوك الملكية باسم المشتري. سُددت جميع الرسوم والمستحقات وأُنجزت إجراءات نظام رسوم نقل الملكية العقارية.&lt;/p&gt;</field>
+    </record>
+
+    <!-- ==================== خطط الدفع / Payment Plans ==================== -->
+
+    <!-- خطة دفع - عقد المكتب التجاري المحجوز -->
+    <record id="ar_pp_comm_booking" model="property.payment.plan">
+        <field name="sales_contract_id" ref="ar_sc_commercial_booked"/>
+        <field name="name">حجز / عربون</field>
+        <field name="due_date">2025-03-15</field>
+        <field name="amount">175000</field>
+        <field name="state">paid</field>
+        <field name="notes">سُدد بالتحويل البنكي</field>
+    </record>
+    <record id="ar_pp_comm_down" model="property.payment.plan">
+        <field name="sales_contract_id" ref="ar_sc_commercial_booked"/>
+        <field name="name">دفعة أولى (20%)</field>
+        <field name="due_date">2025-04-30</field>
+        <field name="amount">350000</field>
+        <field name="state">pending</field>
+        <field name="notes">مرتبطة بصرف التمويل البنكي</field>
+    </record>
+    <record id="ar_pp_comm_milestone1" model="property.payment.plan">
+        <field name="sales_contract_id" ref="ar_sc_commercial_booked"/>
+        <field name="name">عند توقيع العقد (30%)</field>
+        <field name="due_date">2025-05-15</field>
+        <field name="amount">525000</field>
+        <field name="state">pending</field>
+    </record>
+    <record id="ar_pp_comm_completion" model="property.payment.plan">
+        <field name="sales_contract_id" ref="ar_sc_commercial_booked"/>
+        <field name="name">عند الإنهاء / التحويل (40%)</field>
+        <field name="due_date">2025-09-30</field>
+        <field name="amount">700000</field>
+        <field name="state">pending</field>
+    </record>
+
+    <!-- ==================== طلبات الصيانة / Maintenance Requests ==================== -->
+
+    <!-- طلب صيانة 1: صيانة تكييف - شقة 101 برج الأعمال -->
+    <record id="ar_maint_ac_apt101" model="property.maintenance">
+        <field name="unit_id" ref="ar_unit_apt_101"/>
+        <field name="maintenance_type">ac_hvac</field>
+        <field name="priority">1</field>
+        <field name="state">new</field>
+        <field name="request_date">2026-05-01</field>
+        <field name="estimated_cost">800</field>
+        <field name="description">خلل في وحدة التكييف المركزي، يصدر أصواتاً غير طبيعية</field>
+    </record>
+
+    <!-- طلب صيانة 2: سباكة - فيلا الروضة -->
+    <record id="maintenance_plumbing_villa7" model="property.maintenance">
+        <field name="unit_id" ref="unit_villa_7"/>
+        <field name="tenant_id" ref="partner_tenant_ahmed"/>
+        <field name="maintenance_type">plumbing</field>
+        <field name="priority">2</field>
+        <field name="state">in_progress</field>
+        <field name="request_date">2026-04-15</field>
+        <field name="estimated_cost">2500</field>
+        <field name="actual_cost">2200</field>
+        <field name="description">تسريب مياه في الحمام الرئيسي وانسداد في المصرف</field>
+    </record>
+
+    <!-- ==================== العمولات / Commissions ==================== -->
+
+    <!-- عمولة بيع المكتب التجاري 305 -->
+    <record id="ar_comm_commercial_305" model="property.commission">
+        <field name="name">CM/2025/0010</field>
+        <field name="commission_type">leasing</field>
+        <field name="sales_contract_id" ref="ar_sc_commercial_booked"/>
+        <field name="base_rent_amount">1750000</field>
+        <field name="company_commission_rate">2.5</field>
+        <field name="agent_id" ref="partner_agent_waleed"/>
+        <field name="agent_share_rate">25.0</field>
+        <field name="vat_applicable" eval="True"/>
+        <field name="vat_rate">15.0</field>
+        <field name="state">approved</field>
+        <field name="notes">عمولة بيع المكتب التجاري 305 - تمت الموافقة</field>
+    </record>
+
+</data>
+</odoo>

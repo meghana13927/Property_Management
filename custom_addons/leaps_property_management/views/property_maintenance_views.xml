@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LIST VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_property_maintenance_list" model="ir.ui.view">
+        <field name="name">property.maintenance.list</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <list string="طلبات الصيانة"
+                  decoration-danger="priority == '2'"
+                  decoration-warning="priority == '1'"
+                  decoration-success="state == 'done'"
+                  decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="maintenance_type"/>
+                <field name="tenant_id"/>
+                <field name="vendor_id"/>
+                <field name="request_date"/>
+                <field name="scheduled_date"/>
+                <field name="estimated_cost" optional="show"/>
+                <field name="actual_cost" optional="show"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'new'"
+                       decoration-warning="state in ('assigned','in_progress')"
+                       decoration-success="state == 'done'"
+                       decoration-danger="state == 'cancelled'"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         KANBAN VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_property_maintenance_kanban" model="ir.ui.view">
+        <field name="name">property.maintenance.kanban</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="maintenance_type"/>
+                <field name="tenant_id"/>
+                <field name="vendor_id"/>
+                <field name="priority"/>
+                <field name="state"/>
+                <field name="request_date"/>
+                <field name="scheduled_date"/>
+                <field name="estimated_cost"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="d-flex justify-content-between align-items-start mb-1">
+                                <strong><field name="name"/></strong>
+                                <field name="priority" widget="priority"/>
+                            </div>
+                            <div class="text-muted small mb-1">
+                                <i class="fa fa-home me-1"/><field name="unit_id"/>
+                            </div>
+                            <div class="small mb-1">
+                                🔧 <field name="maintenance_type"/>
+                            </div>
+                            <t t-if="record.vendor_id.value">
+                                <div class="small text-muted mb-1">
+                                    <i class="fa fa-wrench me-1"/><field name="vendor_id"/>
+                                </div>
+                            </t>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="small text-muted"><field name="request_date"/></span>
+                                <field name="state" widget="badge"
+                                       decoration-info="state == 'new'"
+                                       decoration-warning="state in ('assigned','in_progress')"
+                                       decoration-success="state == 'done'"
+                                       decoration-danger="state == 'cancelled'"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FORM VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_property_maintenance_form" model="ir.ui.view">
+        <field name="name">property.maintenance.form</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <form string="طلب صيانة">
+                <header>
+                    <button name="action_assign" string="تعيين للمورد"
+                            type="object" class="btn-primary"
+                            invisible="state not in ('new',)"/>
+                    <button name="action_start" string="بدء العمل"
+                            type="object" class="btn-primary"
+                            invisible="state not in ('assigned',)"/>
+                    <button name="action_done" string="تعيين كمكتمل"
+                            type="object" class="btn-success"
+                            invisible="state not in ('in_progress','assigned')"/>
+                    <button name="action_cancel" string="إلغاء"
+                            type="object" class="btn-danger"
+                            invisible="state in ('done','cancelled')"/>
+                    <button name="action_reset" string="إعادة إلى جديد"
+                            type="object"
+                            invisible="state not in ('cancelled',)"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,assigned,in_progress,done"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="تفاصيل الطلب">
+                            <field name="unit_id"
+                                   options="{'no_create': True}"
+                                   domain="[('state','not in',['sold'])]"/>
+                            <field name="owner_id" readonly="1"/>
+                            <field name="tenant_id"
+                                   options="{'no_create': True}"/>
+                            <field name="maintenance_type"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                        <group string="التواريخ">
+                            <field name="request_date"/>
+                            <field name="scheduled_date"/>
+                            <field name="completion_date"
+                                   readonly="state != 'done'"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="المورد / المقاول">
+                            <field name="vendor_id"
+                                   options="{'no_create': True}"
+                                   domain="[('supplier_rank','>',0)]"/>
+                        </group>
+                        <group string="التكاليف">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="estimated_cost"/>
+                            <field name="actual_cost"
+                                   readonly="state not in ('in_progress','done')"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="وصف المشكلة" name="description">
+                            <field name="description"
+                                   placeholder="صف مشكلة الصيانة بالتفصيل..."/>
+                        </page>
+                        <page string="ملاحظات داخلية" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         SEARCH VIEW
+    ══════════════════════════════════════════════════════════ -->
+    <record id="view_property_maintenance_search" model="ir.ui.view">
+        <field name="name">property.maintenance.search</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <search string="طلبات الصيانة">
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="tenant_id"/>
+                <field name="vendor_id"/>
+                <separator/>
+                <filter name="filter_new"         string="جديد"         domain="[('state','=','new')]"/>
+                <filter name="filter_assigned"    string="مُعيَّن"      domain="[('state','=','assigned')]"/>
+                <filter name="filter_in_progress" string="قيد التنفيذ"  domain="[('state','=','in_progress')]"/>
+                <filter name="filter_done"        string="مكتمل"        domain="[('state','=','done')]"/>
+                <filter name="filter_cancelled"   string="ملغي"         domain="[('state','=','cancelled')]"/>
+                <separator/>
+                <filter name="filter_urgent"      string="عاجل"         domain="[('priority','=','2')]"/>
+                <filter name="filter_high"        string="أولوية عالية" domain="[('priority','in',['1','2'])]"/>
+                <separator/>
+                <group>
+                    <filter name="group_state"    string="الحالة"           context="{'group_by':'state'}"/>
+                    <filter name="group_type"     string="نوع الصيانة"      context="{'group_by':'maintenance_type'}"/>
+                    <filter name="group_unit"     string="الوحدة العقارية"  context="{'group_by':'unit_id'}"/>
+                    <filter name="group_vendor"   string="المورد"           context="{'group_by':'vendor_id'}"/>
+                    <filter name="group_month"    string="الشهر"            context="{'group_by':'request_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         ACTION
+    ══════════════════════════════════════════════════════════ -->
+    <record id="action_property_maintenance" model="ir.actions.act_window">
+        <field name="name">طلبات الصيانة</field>
+        <field name="res_model">property.maintenance</field>
+        <field name="view_mode">list,kanban,form,graph</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                لا توجد طلبات صيانة بعد!
+            </p>
+            <p>أنشئ طلب صيانة جديداً لتتبع الإصلاحات وأعمال الخدمة في عقاراتك.</p>
+        </field>
+    </record>
+
+    <record id="view_property_maintenance_graph" model="ir.ui.view">
+        <field name="name">property.maintenance.graph</field>
+        <field name="model">property.maintenance</field>
+        <field name="arch" type="xml">
+            <graph string="الصيانة حسب النوع" type="pie" sample="1">
+                <field name="maintenance_type" type="row"/>
+                <field name="actual_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+</odoo>

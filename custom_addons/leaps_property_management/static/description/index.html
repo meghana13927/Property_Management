@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Property Management — إدارة العقارات | Odoo 19</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f5f5f5; color: #333; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #4a2c5e 100%);
+    color: #fff;
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .hero h1 { font-size: 2.5em; font-weight: 700; margin-bottom: 10px; }
+  .hero h1 span { color: #e8c4f0; }
+  .hero .arabic-title { font-size: 1.6em; color: #e8c4f0; margin-bottom: 18px; direction: rtl; }
+  .hero p { font-size: 1.1em; color: #c9d0e8; max-width: 680px; margin: 0 auto 10px; line-height: 1.6; }
+  .hero p.ar { direction: rtl; font-size: 1em; color: #d8c0e8; }
+  .badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
+  .badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(232,196,240,0.5);
+    color: #e8c4f0;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.88em;
+    font-weight: 600;
+  }
+
+  /* Section */
+  .section { max-width: 980px; margin: 0 auto; padding: 50px 24px; }
+  .section-title { font-size: 1.65em; font-weight: 700; color: #1a1a2e; text-align: center; margin-bottom: 4px; }
+  .section-title .ar { font-size: 0.8em; color: #875A7B; display: block; direction: rtl; margin-top: 4px; }
+  .section-subtitle { text-align: center; color: #666; margin-bottom: 32px; font-size: 0.95em; }
+  .divider { width: 60px; height: 4px; background: #875A7B; margin: 10px auto 32px; border-radius: 2px; }
+
+  /* Features Grid */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feature-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 26px 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    border-top: 4px solid #875A7B;
+  }
+  .feature-icon { font-size: 2em; margin-bottom: 10px; }
+  .feature-card h3 { font-size: 1em; color: #1a1a2e; margin-bottom: 4px; font-weight: 700; }
+  .feature-card h3 .ar { font-size: 0.88em; color: #875A7B; display: block; direction: rtl; }
+  .feature-card p { font-size: 0.85em; color: #666; line-height: 1.6; }
+  .feature-card p.ar { direction: rtl; font-size: 0.82em; color: #888; margin-top: 6px; line-height: 1.6; border-top: 1px dashed #e0c8e8; padding-top: 6px; }
+
+  /* Flow Steps */
+  .flow { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .flow-step {
+    background: #fff;
+    border-radius: 10px;
+    padding: 22px 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: flex;
+    gap: 16px;
+  }
+  .flow-num {
+    flex-shrink: 0;
+    width: 44px; height: 44px;
+    background: #1a1a2e;
+    color: #e8c4f0;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 1.15em;
+  }
+  .flow-body h4 { font-size: 0.98em; color: #1a1a2e; font-weight: 700; margin-bottom: 2px; }
+  .flow-body h4 .ar { font-size: 0.88em; color: #875A7B; display: block; direction: rtl; }
+  .flow-body p { font-size: 0.83em; color: #666; line-height: 1.5; }
+  .flow-body p.ar { direction: rtl; font-size: 0.82em; color: #888; margin-top: 4px; line-height: 1.5; }
+
+  /* Screenshots */
+  .screenshots-section { background: #fff; }
+  .screenshot-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .screenshot-card img { display: block; width: 100%; }
+  .screenshot-caption {
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+  .caption-en { font-size: 0.86em; color: #444; font-weight: 600; }
+  .caption-ar { font-size: 0.84em; color: #875A7B; direction: rtl; text-align: right; }
+  .screenshot-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #1a1a2e; color: #e8c4f0;
+    border-radius: 50%; width: 24px; height: 24px;
+    font-size: 0.75em; font-weight: 700; margin-right: 8px; flex-shrink: 0;
+  }
+
+  /* Summary Table */
+  .summary-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .summary-table th { background: #1a1a2e; color: #e8c4f0; padding: 13px 16px; text-align: left; font-size: 0.88em; font-weight: 700; }
+  .summary-table td { padding: 12px 16px; font-size: 0.85em; color: #444; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .summary-table tr:nth-child(even) td { background: #f8f9fa; }
+  .summary-table td:first-child { font-weight: 700; color: #1a1a2e; white-space: nowrap; }
+  .summary-table .ar-cell { direction: rtl; color: #875A7B; font-size: 0.9em; }
+  .nav-path { font-family: monospace; background: #f3eaf5; color: #875A7B; padding: 2px 8px; border-radius: 4px; font-size: 0.82em; }
+
+  /* Lang tag */
+  .lang-tag {
+    display: inline-block;
+    font-size: 0.7em;
+    background: #e8c4f0;
+    color: #4a2c5e;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* Pipeline */
+  .pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 0 0 32px;
+  }
+  .pip-step {
+    background: #1a1a2e;
+    color: #e8c4f0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    text-align: center;
+    min-width: 110px;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .pip-step .ar { font-size: 0.9em; color: #c9a0dc; display: block; direction: rtl; font-weight: 400; }
+  .pip-step.green { background: #155724; }
+  .pip-step.blue  { background: #004085; }
+  .pip-step.gold  { background: #856404; }
+  .pip-step.red   { background: #721c24; }
+  .pip-step.purple{ background: #3d0066; }
+  .pip-arrow { color: #875A7B; font-size: 1.5em; padding: 0 6px; font-weight: 700; }
+
+  /* Detail cards */
+  .detail-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-bottom: 24px; }
+  .detail-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    border-left: 5px solid #875A7B;
+  }
+  .detail-card.green { border-left-color: #28a745; }
+  .detail-card.blue  { border-left-color: #004085; }
+  .detail-card.gold  { border-left-color: #856404; }
+  .detail-card.purple{ border-left-color: #3d0066; }
+  .detail-card .step-label {
+    font-size: 0.72em; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: #875A7B; margin-bottom: 6px;
+  }
+  .detail-card.green .step-label { color: #28a745; }
+  .detail-card.blue  .step-label { color: #004085; }
+  .detail-card.gold  .step-label { color: #856404; }
+  .detail-card.purple .step-label{ color: #3d0066; }
+  .detail-card h4 { font-size: 0.97em; color: #1a1a2e; font-weight: 700; margin-bottom: 2px; }
+  .detail-card h4 .ar { font-size: 0.88em; color: #875A7B; display: block; direction: rtl; font-weight: 400; }
+  .detail-card ul { margin: 8px 0 0 16px; }
+  .detail-card ul li { font-size: 0.83em; color: #555; line-height: 1.7; }
+  .detail-card .ar-notes { direction: rtl; font-size: 0.81em; color: #888; margin-top: 8px;
+    border-top: 1px dashed #e0c8e8; padding-top: 8px; line-height: 1.6; }
+
+  /* Callout box */
+  .callout {
+    background: #f3eaf5;
+    border: 1.5px solid #875A7B;
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    font-size: 0.88em;
+    color: #4a2c5e;
+    line-height: 1.7;
+  }
+  .callout strong { color: #1a1a2e; }
+  .callout .ar { direction: rtl; display: block; color: #875A7B; margin-top: 6px; }
+
+  /* Building why grid */
+  .why-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .why-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    text-align: center;
+  }
+  .why-card .why-icon { font-size: 2em; margin-bottom: 10px; }
+  .why-card h4 { font-size: 0.92em; color: #1a1a2e; font-weight: 700; margin-bottom: 6px; }
+  .why-card h4 .ar { font-size: 0.88em; color: #875A7B; display: block; direction: rtl; font-weight: 400; }
+  .why-card p { font-size: 0.82em; color: #666; line-height: 1.6; }
+
+  /* Commission table */
+  .comm-table { width:100%; border-collapse:collapse; background:#fff; border-radius:10px;
+    overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.08); margin-bottom:20px; }
+  .comm-table th { background:#875A7B; color:#fff; padding:12px 14px; font-size:0.85em; text-align:left; }
+  .comm-table td { padding:11px 14px; font-size:0.83em; color:#444; border-bottom:1px solid #f0e8f5; vertical-align:top; }
+  .comm-table tr:last-child td { border-bottom:none; }
+  .comm-table tr:nth-child(even) td { background:#fdf7ff; }
+  .comm-table .ar-cell { direction:rtl; color:#875A7B; }
+  .tag { display:inline-block; background:#e8c4f0; color:#4a2c5e; border-radius:4px;
+    padding:2px 8px; font-size:0.78em; font-weight:700; }
+
+  /* Footer */
+  .footer {
+    background: #1a1a2e;
+    color: #8892b0;
+    text-align: center;
+    padding: 26px 20px;
+    font-size: 0.86em;
+  }
+  .footer span { color: #e8c4f0; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════ HERO -->
+<div class="hero">
+  <h1>🏠 Property Management <span>|</span> <span>إدارة العقارات</span></h1>
+  <p>Complete property solution for Odoo 19 — manage rentals, leases, sales, SPA contracts and maintenance in one place.</p>
+  <p class="ar">نظام شامل لإدارة العقارات على Odoo 19 — إدارة عقود الإيجار والمبيعات واتفاقيات البيع والصيانة في مكان واحد.</p>
+  <div class="badges">
+    <span class="badge">✓ Odoo 19</span>
+    <span class="badge">✓ Arabic / عربي</span>
+    <span class="badge">✓ Free LGPL-3</span>
+    <span class="badge">✓ Rental &amp; Sales</span>
+    <span class="badge">✓ Maintenance</span>
+    <span class="badge">✓ Auto Invoicing</span>
+    <span class="badge">✓ PDF Reports</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ FEATURES -->
+<div style="background:#f5f5f5;">
+  <div class="section">
+    <h2 class="section-title">Key Features <span class="ar">المميزات الرئيسية</span></h2>
+    <div class="divider"></div>
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">🏢</div>
+        <h3>Property &amp; Unit Management <span class="ar">إدارة العقارات والوحدات</span></h3>
+        <p>Track apartments, villas, commercial units and more. Kanban board with colour-coded status badges.</p>
+        <p class="ar">تتبع الشقق والفلل والوحدات التجارية. لوحة كانبان مع شارات حالة ملوّنة.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <h3>Rental Contract Management <span class="ar">إدارة عقود الإيجار</span></h3>
+        <p>Full lease lifecycle: Draft → Active → Expired / Terminated. Auto invoice generation by payment term.</p>
+        <p class="ar">دورة حياة الإيجار الكاملة: مسودة ← نشط ← منتهي. إنشاء فواتير تلقائي حسب شروط الدفع.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <h3>Sales &amp; SPA Contracts <span class="ar">عقود البيع واتفاقيات الشراء</span></h3>
+        <p>Full sale pipeline: Booking → SPA Signed → Completed. Installment plans with balance tracking.</p>
+        <p class="ar">مسار البيع الكامل: حجز ← توقيع اتفاقية ← اكتمال. خطط تقسيط مع تتبع الأرصدة.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🔧</div>
+        <h3>Maintenance Management <span class="ar">إدارة الصيانة</span></h3>
+        <p>11 maintenance types, priority levels, vendor assignment, cost tracking. Auto unit status updates.</p>
+        <p class="ar">11 نوع صيانة، مستويات الأولوية، إسناد المقاول، تتبع التكاليف. تحديث تلقائي لحالة الوحدة.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">💰</div>
+        <h3>Automated Invoicing <span class="ar">الفوترة التلقائية</span></h3>
+        <p>Generate all rent invoices at once: monthly, quarterly, bi-annual or yearly. One-click booking fee invoice.</p>
+        <p class="ar">إنشاء جميع فواتير الإيجار دفعة واحدة: شهري أو ربع سنوي أو نصف سنوي أو سنوي.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📄</div>
+        <h3>PDF Contract Reports <span class="ar">تقارير العقود PDF</span></h3>
+        <p>Professional Rental Agreement and Sales Contract PDFs with party details, terms and signature lines.</p>
+        <p class="ar">مستندات PDF احترافية لعقود الإيجار والبيع مع تفاصيل الأطراف والشروط وخطوط التوقيع.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SCREENSHOTS -->
+<div class="screenshots-section">
+  <div class="section">
+    <h2 class="section-title">Screenshots <span class="ar">لقطات الشاشة</span></h2>
+    <p class="section-subtitle">Full workflow — from property listing to contract to maintenance</p>
+    <div class="divider"></div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_01_units_kanban.png" alt="Property Units Kanban — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">1</span><span class="caption-en">Property Units Kanban — Odoo 19 UI with colour-coded status badges (Available, Rented, Booked, Sold) and price, area, bedrooms per card</span></span>
+        <span class="caption-ar">كانبان الوحدات العقارية — واجهة Odoo 19 مع شارات الحالة الملوّنة والسعر والمساحة وعدد الغرف</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_02_rental_form.png" alt="Rental Contract Form — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">2</span><span class="caption-en">Rental Contract Form — status bar (Draft → Active → Expired), smart buttons (Invoices 12, Commissions 1), auto-invoice note on activation</span></span>
+        <span class="caption-ar">نموذج عقد الإيجار — شريط الحالة، الأزرار الذكية (الفواتير والعمولات)، ملاحظة الفوترة التلقائية عند التفعيل</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_03_buildings.png" alt="Buildings — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">3</span><span class="caption-en">Buildings Kanban — each building shows live available / rented / occupancy % stats auto-calculated from its linked units</span></span>
+        <span class="caption-ar">كانبان المباني — كل مبنى يعرض الإحصائيات الحية: المتاح والمؤجر ونسبة الإشغال محسوبة تلقائياً</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_04_rental_list.png" alt="Rental Contracts — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">4</span><span class="caption-en">Rental Contracts List — tenant, unit, dates, monthly rent and status (Draft → Active → Expired) in one view</span></span>
+        <span class="caption-ar">قائمة عقود الإيجار — المستأجر والوحدة والتواريخ والإيجار الشهري والحالة في عرض واحد</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_05_sales_list.png" alt="Sales Contracts — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">5</span><span class="caption-en">Sales Contracts List — buyer, unit, agreed price and status (Draft → Booked → Signed → Completed); unit auto-changes to Sold on completion</span></span>
+        <span class="caption-ar">قائمة عقود البيع — المشتري والوحدة والسعر المتفق والحالة؛ الوحدة تتحول تلقائياً إلى مباعة عند الإكمال</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_06_commission.png" alt="REGA Commissions — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">6</span><span class="caption-en">Commission Form — base amount 360,000 SAR, company rate 2.5% → 9,000 SAR, agent share 25% → 2,250 SAR, VAT 15% → 1,350 SAR, status: Approved</span></span>
+        <span class="caption-ar">نموذج العمولة — المبلغ الأساسي 360,000 ريال، عمولة الشركة 2.5%، نصيب الوكيل 25%، ضريبة القيمة المضافة 15% — حالة: معتمد</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_07_maintenance.png" alt="Maintenance — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">7</span><span class="caption-en">Maintenance Requests List — type (Electrical, Plumbing, Carpentry…), vendor, estimated cost, priority and status per request</span></span>
+        <span class="caption-ar">قائمة طلبات الصيانة — النوع (كهرباء، سباكة، نجارة...)، المورد، التكلفة التقديرية، الأولوية والحالة</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_08_dashboard.png" alt="Dashboard — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">8</span><span class="caption-en">Dashboard — 8 live KPI cards (Total 82, Available 45, Rented 28, Sold 9, Booked 5, Contracts 34, Maintenance 12, Commissions 67) + per-building occupancy bars</span></span>
+        <span class="caption-ar">لوحة التحكم — 8 بطاقات مؤشرات حية (الإجمالي 82، المتاح 45، المؤجر 28، المباع 9...) + أشرطة الإشغال لكل مبنى</span>
+      </div>
+    </div>
+
+    <div class="screenshot-card">
+      <img src="odoo19_09_permissions.png" alt="Permissions Matrix — Odoo 19"/>
+      <div class="screenshot-caption">
+        <span><span class="screenshot-num">9</span><span class="caption-en">Permissions Matrix — 3-level access control: Agent (read-only), Manager (create &amp; edit), Admin (full access including delete &amp; settings)</span></span>
+        <span class="caption-ar">مصفوفة الصلاحيات — 3 مستويات: وكيل (قراءة فقط)، مدير (إضافة وتعديل)، مدير عام (صلاحيات كاملة شاملة الحذف والإعدادات)</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ FULL FLOW -->
+<div style="background:#f5f5f5;">
+  <div class="section">
+    <h2 class="section-title">Full Workflow <span class="ar">المسار الكامل</span></h2>
+    <p class="section-subtitle">Step-by-step — from setup to signed contract and beyond / من الإعداد إلى التوقيع وما بعده</p>
+    <div class="divider"></div>
+    <div class="flow">
+
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-body">
+          <h4>Install &amp; Configure <span class="ar">التثبيت والإعداد</span></h4>
+          <p>Install the module — demo data loads automatically: 6 units, 3 rental and 2 sales contracts, 8 amenities.</p>
+          <p class="ar">ثبّت الوحدة — تُحمَّل البيانات التجريبية تلقائياً: 6 وحدات وعقود إيجار ومبيعات ومرافق.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-body">
+          <h4>Add Amenities <span class="ar">إضافة المرافق</span></h4>
+          <p>Go to <strong>Property → Configuration → Amenities</strong> and create features (Pool, Gym, Parking…).</p>
+          <p class="ar">انتقل إلى <strong>العقارات ← الإعدادات ← المرافق</strong> وأنشئ الميزات (مسبح، صالة رياضية، موقف…).</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-body">
+          <h4>Create Property Units <span class="ar">إنشاء الوحدات العقارية</span></h4>
+          <p>Go to <strong>Property → Properties</strong>. Add type, location, specs, pricing, owner and amenities. Set state to <em>Available</em>.</p>
+          <p class="ar">انتقل إلى <strong>العقارات ← العقارات</strong>. أضف النوع والموقع والمواصفات والتسعير والمالك.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-body">
+          <h4>Create Rental Contract <span class="ar">إنشاء عقد الإيجار</span></h4>
+          <p>Go to <strong>Property → Rental</strong>. Select unit, tenant, dates, payment term. Click <em>Activate</em> — unit becomes Rented. Click <em>Generate Invoices</em> to auto-create all period invoices.</p>
+          <p class="ar">انتقل إلى <strong>العقارات ← الإيجار</strong>. اختر الوحدة والمستأجر والتواريخ وشروط الدفع. انقر <em>تفعيل</em> ثم <em>إنشاء الفواتير</em>.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-body">
+          <h4>Create Sales Contract <span class="ar">إنشاء عقد البيع</span></h4>
+          <p>Go to <strong>Property → Sales</strong>. Select unit &amp; buyer, enter agreed price &amp; fees, add payment plan milestones. Progress through <em>Booking → SPA Signed → Completed</em>.</p>
+          <p class="ar">انتقل إلى <strong>العقارات ← المبيعات</strong>. اختر الوحدة والمشتري والسعر والرسوم وأضف خطة الأقساط.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-body">
+          <h4>Log Maintenance Requests <span class="ar">تسجيل طلبات الصيانة</span></h4>
+          <p>Go to <strong>Property → Maintenance</strong>. Create request with type &amp; priority. Assign vendor → Start Work → Mark Completed. Unit status updates automatically.</p>
+          <p class="ar">انتقل إلى <strong>العقارات ← الصيانة</strong>. أنشئ طلباً بالنوع والأولوية. أسنده للمقاول ← ابدأ ← أكمل. الحالة تتحدث تلقائياً.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">7</div>
+        <div class="flow-body">
+          <h4>Print PDF Contracts <span class="ar">طباعة العقود PDF</span></h4>
+          <p>From any Rental or Sales contract, use the <strong>Print</strong> button to generate a professional PDF with all party details, terms, financials and signature lines.</p>
+          <p class="ar">من أي عقد إيجار أو بيع، انقر <strong>طباعة</strong> لإنشاء ملف PDF احترافي بتفاصيل الأطراف والشروط والتوقيعات.</p>
+        </div>
+      </div>
+
+      <div class="flow-step">
+        <div class="flow-num">8</div>
+        <div class="flow-body">
+          <h4>Switch to Arabic UI <span class="ar">تبديل الواجهة إلى العربية</span></h4>
+          <p>Go to <strong>Settings → Translations → Languages</strong>, activate Arabic. All menus, buttons, fields and error messages switch to Arabic automatically.</p>
+          <p class="ar">انتقل إلى <strong>الإعدادات ← الترجمات ← اللغات</strong>، فعّل العربية. جميع القوائم والأزرار والحقول ورسائل الخطأ تتحول للعربية تلقائياً.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ RENT FLOW -->
+<div style="background:#fff;">
+  <div class="section">
+    <h2 class="section-title">🏠 Rental Flow — Full Walkthrough <span class="ar">تدفق الإيجار الكامل</span></h2>
+    <p class="section-subtitle">From creating a unit to generating invoices — step by step / من إنشاء الوحدة إلى إنشاء الفواتير</p>
+    <div class="divider"></div>
+
+    <!-- Pipeline -->
+    <div class="pipeline">
+      <div class="pip-step">Add Unit<span class="ar">أضف الوحدة</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step blue">New Contract<span class="ar">عقد جديد</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step gold">Activate<span class="ar">تفعيل</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step green">Generate Invoices<span class="ar">إنشاء الفواتير</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step purple">Collect &amp; Close<span class="ar">تحصيل وإغلاق</span></div>
+    </div>
+
+    <!-- Detail cards -->
+    <div class="detail-grid">
+
+      <div class="detail-card">
+        <div class="step-label">Step 1</div>
+        <h4>Create the Property Unit <span class="ar">إنشاء الوحدة العقارية</span></h4>
+        <ul>
+          <li>Go to <strong>Property → Properties → New</strong></li>
+          <li>Set type (Apartment / Villa / Commercial…)</li>
+          <li>Enter monthly rent amount &amp; currency</li>
+          <li>Set owner (landlord) from contacts</li>
+          <li>State must be <strong>Available</strong></li>
+        </ul>
+        <p class="ar-notes">اذهب إلى العقارات ← العقارات ← جديد. اختر النوع، أدخل الإيجار الشهري والمالك. تأكد أن الحالة <strong>متاح</strong>.</p>
+      </div>
+
+      <div class="detail-card blue">
+        <div class="step-label">Step 2</div>
+        <h4>Create Rental Contract <span class="ar">إنشاء عقد الإيجار</span></h4>
+        <ul>
+          <li>Go to <strong>Property → Rental → New</strong></li>
+          <li>Select the unit → rent amount auto-fills</li>
+          <li>Select tenant from contacts</li>
+          <li>Set start date, end date</li>
+          <li>Choose payment term: Monthly / Quarterly / Bi-Annual / Yearly</li>
+          <li>Add security deposit &amp; admin fee if needed</li>
+        </ul>
+        <p class="ar-notes">اذهب إلى الإيجار ← جديد. اختر الوحدة (يملأ الإيجار تلقائياً)، المستأجر، التواريخ، وشروط الدفع.</p>
+      </div>
+
+      <div class="detail-card gold">
+        <div class="step-label">Step 3</div>
+        <h4>Activate the Contract <span class="ar">تفعيل العقد</span></h4>
+        <ul>
+          <li>Click <strong>Activate</strong> button</li>
+          <li>Contract state → <em>Active</em></li>
+          <li>Unit state automatically → <em>Rented</em></li>
+          <li>Unit is now locked from new contracts</li>
+          <li>For Saudi Arabia: enter Ejar Registration No.</li>
+        </ul>
+        <p class="ar-notes">انقر <strong>تفعيل</strong>. العقد يصبح نشطاً والوحدة تصبح <em>مؤجَّرة</em> تلقائياً. أدخل رقم تسجيل إيجار للعقود السكنية.</p>
+      </div>
+
+      <div class="detail-card green">
+        <div class="step-label">Step 4</div>
+        <h4>Generate Invoices <span class="ar">إنشاء الفواتير</span></h4>
+        <ul>
+          <li>Click <strong>Generate Invoices</strong> button</li>
+          <li>All period invoices created at once (e.g. 12 monthly invoices)</li>
+          <li>Each invoice has due date per payment schedule</li>
+          <li>View all invoices via smart button (🧾 Invoices)</li>
+          <li>Confirm &amp; collect from Accounting module</li>
+        </ul>
+        <p class="ar-notes">انقر <strong>إنشاء الفواتير</strong>. تُنشأ جميع الفواتير دفعة واحدة حسب شروط الدفع. تابع التحصيل من المحاسبة.</p>
+      </div>
+
+      <div class="detail-card purple">
+        <div class="step-label">Step 5 — End of Lease</div>
+        <h4>Expire / Terminate / Renew <span class="ar">انتهاء / إنهاء / تجديد</span></h4>
+        <ul>
+          <li><strong>Expire:</strong> contract ends naturally on end date</li>
+          <li><strong>Terminate:</strong> click Terminate for early exit</li>
+          <li><strong>Renew:</strong> create new contract — check "Renewal" (no 2.5% commission again per REGA)</li>
+          <li>Unit state resets to <em>Available</em> on expiry/termination</li>
+        </ul>
+        <p class="ar-notes">عند الانتهاء: أنهِ أو جدّد. العقد المجدَّد يُعفى من عمولة 2.5% مرة أخرى وفق لوائح هيئة العقار.</p>
+      </div>
+
+      <div class="detail-card">
+        <div class="step-label">Optional — REGA / Saudi</div>
+        <h4>Add Leasing Commission <span class="ar">إضافة عمولة الإيجار</span></h4>
+        <ul>
+          <li>Go to <strong>Property → Commissions → New</strong></li>
+          <li>Type: <em>Leasing Commission (2.5%)</em></li>
+          <li>Link to the rental contract</li>
+          <li>Enter annual rent — company commission auto-calculates (2.5%)</li>
+          <li>Set agent &amp; their share %, approve, then mark Paid</li>
+        </ul>
+        <p class="ar-notes">اذهب إلى العمولات ← جديد. اختر نوع العمولة وأربطها بالعقد. تُحسَب 2.5% تلقائياً وفق معيار هيئة العقار.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ SALE FLOW -->
+<div style="background:#f5f5f5;">
+  <div class="section">
+    <h2 class="section-title">🏢 Sale Flow + Commission <span class="ar">تدفق البيع والعمولة</span></h2>
+    <p class="section-subtitle">From listing to ownership transfer with full commission tracking / من الإدراج إلى نقل الملكية مع تتبع العمولة</p>
+    <div class="divider"></div>
+
+    <!-- Pipeline -->
+    <div class="pipeline">
+      <div class="pip-step">Add Unit<span class="ar">أضف الوحدة</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step blue">Booking<span class="ar">حجز</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step gold">SPA Signed<span class="ar">SPA موقَّع</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step green">Completed<span class="ar">مكتمل</span></div>
+      <div class="pip-arrow">→</div>
+      <div class="pip-step purple">Commission Paid<span class="ar">العمولة مدفوعة</span></div>
+    </div>
+
+    <div class="detail-grid">
+
+      <div class="detail-card">
+        <div class="step-label">Step 1</div>
+        <h4>Create the Property Unit <span class="ar">إنشاء الوحدة للبيع</span></h4>
+        <ul>
+          <li>Go to <strong>Property → Properties → New</strong></li>
+          <li>Set type, specs, location, images</li>
+          <li>Enter <strong>sale price</strong> (not rent)</li>
+          <li>Set owner (seller) from contacts</li>
+          <li>State: <strong>Available</strong></li>
+        </ul>
+        <p class="ar-notes">أنشئ الوحدة وأدخل <strong>سعر البيع</strong> والمالك. تأكد أن الحالة <em>متاح</em>.</p>
+      </div>
+
+      <div class="detail-card blue">
+        <div class="step-label">Step 2 — Booking</div>
+        <h4>Create Sales Contract <span class="ar">إنشاء عقد البيع</span></h4>
+        <ul>
+          <li>Go to <strong>Property → Sales → New</strong></li>
+          <li>Select unit &amp; buyer</li>
+          <li>Enter agreed price, booking fee, registration fee, VAT</li>
+          <li>Add installment payment plan (milestone rows)</li>
+          <li>Click <strong>Book</strong> → unit becomes <em>Booked</em></li>
+          <li>Generate booking fee invoice with one click</li>
+        </ul>
+        <p class="ar-notes">اذهب إلى المبيعات ← جديد. اختر الوحدة والمشتري وأدخل السعر والرسوم وخطة الأقساط. انقر <strong>حجز</strong>.</p>
+      </div>
+
+      <div class="detail-card gold">
+        <div class="step-label">Step 3 — SPA</div>
+        <h4>Sign the SPA <span class="ar">توقيع اتفاقية الشراء</span></h4>
+        <ul>
+          <li>Print the SPA PDF → parties sign</li>
+          <li>Click <strong>Sign SPA</strong> in Odoo</li>
+          <li>Contract state → <em>SPA Signed</em></li>
+          <li>Track remaining balance &amp; payment milestones</li>
+          <li>Generate progress invoices as milestones are met</li>
+        </ul>
+        <p class="ar-notes">اطبع وثيقة SPA للتوقيع. انقر <strong>توقيع SPA</strong>. تابع الأقساط المتبقية وأنشئ فواتير عند كل مرحلة.</p>
+      </div>
+
+      <div class="detail-card green">
+        <div class="step-label">Step 4 — Transfer</div>
+        <h4>Complete the Sale <span class="ar">إتمام البيع</span></h4>
+        <ul>
+          <li>All payments received → click <strong>Complete</strong></li>
+          <li>Contract state → <em>Completed</em></li>
+          <li>Unit state → <em>Sold</em></li>
+          <li>Unit is removed from available inventory</li>
+          <li>Full audit trail in chatter</li>
+        </ul>
+        <p class="ar-notes">بعد تحصيل كامل المبلغ، انقر <strong>إكمال</strong>. الوحدة تصبح <em>مباعة</em> وتُزال من المخزون المتاح.</p>
+      </div>
+
+      <div class="detail-card purple">
+        <div class="step-label">Step 5 — Commission</div>
+        <h4>Record Sales Commission <span class="ar">تسجيل عمولة البيع</span></h4>
+        <ul>
+          <li>Go to <strong>Property → Commissions → New</strong></li>
+          <li>Link to the <strong>Sales Contract</strong></li>
+          <li>Choose commission type (Leasing / Management / KPI…)</li>
+          <li>Enter sale amount → company commission % auto-calculates</li>
+          <li>Set agent &amp; their share %</li>
+          <li>Approve → Pay → dashboardupdates</li>
+        </ul>
+        <p class="ar-notes">اذهب إلى العمولات وأربطها بعقد البيع. أدخل قيمة البيع — تُحسَب العمولة تلقائياً. حدد الوسيط ونسبته ثم اعتمد وادفع.</p>
+      </div>
+
+      <div class="detail-card">
+        <div class="step-label">Commission Types</div>
+        <h4>5 Commission Types <span class="ar">5 أنواع عمولات</span></h4>
+        <ul>
+          <li>🏠 <strong>Leasing (2.5%)</strong> — standard REGA rate for rental</li>
+          <li>🏢 <strong>Management Fee</strong> — ongoing property management</li>
+          <li>🔄 <strong>Renewal Fee</strong> — flat fee for contract renewals</li>
+          <li>💰 <strong>Collection Bonus</strong> — incentive for rent collection</li>
+          <li>🏆 <strong>KPI / Occupancy Bonus</strong> — performance reward</li>
+        </ul>
+        <p class="ar-notes">إيجار 2.5% | رسوم إدارة | رسوم تجديد | مكافأة تحصيل | مكافأة إشغال — كل الأنواع المعتمدة من هيئة العقار.</p>
+      </div>
+
+    </div>
+
+    <!-- Commission calculation callout -->
+    <div class="callout">
+      💡 <strong>How commission is calculated:</strong>
+      Company Commission = Base Amount × Company Rate % &nbsp;|&nbsp;
+      Agent Share = Company Commission × Agent Share % &nbsp;|&nbsp;
+      VAT (15%) added automatically for Saudi Arabia.
+      <span class="ar">طريقة الحساب: عمولة الشركة = المبلغ الأساسي × نسبة الشركة | حصة الوسيط = عمولة الشركة × نسبته | يُضاف ضريبة القيمة المضافة 15% تلقائياً.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ BUILDINGS -->
+<div style="background:#fff;">
+  <div class="section">
+    <h2 class="section-title">🏗️ Buildings / Projects — Why You Need It <span class="ar">المباني والمشاريع — لماذا تحتاجها</span></h2>
+    <p class="section-subtitle">Group your units under buildings — track occupancy and revenue per building / جمّع وحداتك تحت مباني — تتبع الإشغال والإيرادات لكل مبنى</p>
+    <div class="divider"></div>
+
+    <div class="why-grid">
+
+      <div class="why-card">
+        <div class="why-icon">📦</div>
+        <h4>Organize Units <span class="ar">تنظيم الوحدات</span></h4>
+        <p>Group apartments, offices or shops under a building or compound. Instantly see all units in one building.</p>
+        <p style="direction:rtl;font-size:0.8em;color:#875A7B;margin-top:6px;">جمّع الشقق والمكاتب والمحلات تحت مبنى واحد. اعرض كل وحداته بنقرة.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">📊</div>
+        <h4>Per-Building Stats <span class="ar">إحصاءات لكل مبنى</span></h4>
+        <p>Each building shows: Total Units, Available, Rented, Sold, Booked, Maintenance and Occupancy % — all computed automatically.</p>
+        <p style="direction:rtl;font-size:0.8em;color:#875A7B;margin-top:6px;">كل مبنى يعرض: الوحدات الكلية، المتاحة، المؤجَّرة، المباعة، ونسبة الإشغال — تُحسَب تلقائياً.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🏙️</div>
+        <h4>Multiple Projects <span class="ar">مشاريع متعددة</span></h4>
+        <p>Manage towers, villa compounds, offices and mixed-use projects separately. 8 building types supported.</p>
+        <p style="direction:rtl;font-size:0.8em;color:#875A7B;margin-top:6px;">أدر أبراجاً ومجمعات وفلل ومكاتب بشكل منفصل. 8 أنواع مباني مدعومة.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">👤</div>
+        <h4>Owner &amp; Developer <span class="ar">المالك والمطور</span></h4>
+        <p>Assign a developer and a building owner separately. Ideal when the developer ≠ current owner.</p>
+        <p style="direction:rtl;font-size:0.8em;color:#875A7B;margin-top:6px;">حدد المطور والمالك بشكل منفصل — مثالي حين يختلف المطور عن المالك الحالي.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">🔗</div>
+        <h4>Linked to Units <span class="ar">مرتبطة بالوحدات</span></h4>
+        <p>Each unit has a "Building / Project" field. One building → many units. Filter, search, report by building.</p>
+        <p style="direction:rtl;font-size:0.8em;color:#875A7B;margin-top:6px;">كل وحدة تحمل حقل "المبنى". مبنى واحد ← وحدات كثيرة. صفّح وابحث وأعدّ تقارير حسب المبنى.</p>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">📋</div>
+        <h4>When to Use It <span class="ar">متى تستخدمه</span></h4>
+        <p>✓ You manage more than one building<br/>✓ Owner wants a per-building report<br/>✓ You have named projects (Tower A, Compound B)</p>
+        <p style="direction:rtl;font-size:0.8em;color:#875A7B;margin-top:6px;">✓ تدير أكثر من مبنى ✓ المالك يريد تقريراً لكل مبنى ✓ لديك مشاريع مسماة</p>
+      </div>
+
+    </div>
+
+    <!-- Buildings path callout -->
+    <div class="callout">
+      📍 <strong>How to use:</strong>
+      Go to <strong>Property → Configuration → Buildings → New</strong>.
+      Fill name, type, city, owner, floors. Then open any Unit and select this building in the <em>Building / Project</em> field.
+      The building's occupancy stats update automatically as unit states change.
+      <span class="ar">
+        اذهب إلى <strong>العقارات ← الإعدادات ← المباني ← جديد</strong>. أدخل الاسم والنوع والمدينة والمالك وعدد الطوابق. ثم افتح أي وحدة واختر المبنى من حقل "المبنى / المشروع". تتحدث إحصاءات الإشغال تلقائياً.
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ WHAT'S INCLUDED TABLE -->
+<div style="background:#fff;">
+  <div class="section">
+    <h2 class="section-title">What's Included <span class="ar">ما يتضمنه النظام</span></h2>
+    <div class="divider"></div>
+    <table class="summary-table">
+      <thead>
+        <tr>
+          <th>Feature / الميزة</th>
+          <th>Description / الوصف</th>
+          <th>Arabic / عربي</th>
+          <th>Access Path</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Property Units</td>
+          <td>Kanban, List &amp; Form — type, specs, pricing, amenities, image</td>
+          <td class="ar-cell">وحدات العقارات — كانبان وقائمة ونموذج</td>
+          <td><span class="nav-path">Property → Properties</span></td>
+        </tr>
+        <tr>
+          <td>Rental Contracts</td>
+          <td>Draft→Active→Expired workflow, auto invoice generation</td>
+          <td class="ar-cell">عقود الإيجار — مسار كامل وفوترة تلقائية</td>
+          <td><span class="nav-path">Property → Rental</span></td>
+        </tr>
+        <tr>
+          <td>Sales Contracts</td>
+          <td>Booking→SPA→Completed, payment plan, fee tracking</td>
+          <td class="ar-cell">عقود البيع — حجز وتوقيع واكتمال وخطة أقساط</td>
+          <td><span class="nav-path">Property → Sales</span></td>
+        </tr>
+        <tr>
+          <td>Maintenance Requests</td>
+          <td>11 types, priority, vendor, cost, auto unit status update</td>
+          <td class="ar-cell">طلبات الصيانة — 11 نوع وأولوية ومقاول وتكاليف</td>
+          <td><span class="nav-path">Property → Maintenance</span></td>
+        </tr>
+        <tr>
+          <td>Rental PDF Report</td>
+          <td>Professional Lease Agreement with party details &amp; signatures</td>
+          <td class="ar-cell">عقد إيجار PDF احترافي مع تفاصيل الأطراف والتوقيعات</td>
+          <td><span class="nav-path">Rental Contract → Print</span></td>
+        </tr>
+        <tr>
+          <td>Sales PDF Report</td>
+          <td>SPA document with financial summary &amp; payment plan</td>
+          <td class="ar-cell">وثيقة اتفاقية الشراء مع الملخص المالي وخطة الدفع</td>
+          <td><span class="nav-path">Sales Contract → Print</span></td>
+        </tr>
+        <tr>
+          <td>Amenities</td>
+          <td>Configurable features linked to units via many-to-many</td>
+          <td class="ar-cell">مرافق قابلة للتخصيص مرتبطة بالوحدات</td>
+          <td><span class="nav-path">Property → Configuration</span></td>
+        </tr>
+        <tr>
+          <td>Arabic Translation <span class="lang-tag">عربي</span></td>
+          <td>Full Arabic UI — menus, fields, buttons, error messages, reports</td>
+          <td class="ar-cell">واجهة عربية كاملة — قوائم وحقول وأزرار ورسائل</td>
+          <td><span class="nav-path">Settings → Languages → Arabic</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ FOOTER -->
+<div class="footer">
+  Developed by <span>leapai.ai</span> &nbsp;|&nbsp;
+  Odoo <span>19.0</span> &nbsp;|&nbsp;
+  Version <span>19.0.1.0.0</span> &nbsp;|&nbsp;
+  <span>LGPL-3</span> &nbsp;|&nbsp;
+  Free to use &nbsp;|&nbsp;
+  <span>يدعم العربية والإنجليزية</span>
+</div>
+
+</body>
+</html>

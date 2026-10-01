@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_occupancy_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="building">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div style="background:#1a1a2e;color:white;padding:20px;margin-bottom:20px;border-radius:6px;">
+                            <h2 style="margin:0;color:white;">Property Occupancy Report</h2>
+                            <p style="margin:4px 0 0;color:#e8c4f0;"><t t-esc="building.name"/> — <t t-esc="building.city or ''"/></p>
+                        </div>
+                        <!-- Stats row -->
+                        <div class="row mb-4" style="text-align:center;">
+                            <div class="col-2"><div style="background:#875A7B;color:white;padding:12px;border-radius:6px;"><strong style="font-size:1.5em;display:block;"><t t-esc="building.unit_count"/></strong>Total</div></div>
+                            <div class="col-2"><div style="background:#28a745;color:white;padding:12px;border-radius:6px;"><strong style="font-size:1.5em;display:block;"><t t-esc="building.available_count"/></strong>Available</div></div>
+                            <div class="col-2"><div style="background:#17a2b8;color:white;padding:12px;border-radius:6px;"><strong style="font-size:1.5em;display:block;"><t t-esc="building.rented_count"/></strong>Rented</div></div>
+                            <div class="col-2"><div style="background:#6c757d;color:white;padding:12px;border-radius:6px;"><strong style="font-size:1.5em;display:block;"><t t-esc="building.sold_count"/></strong>Sold</div></div>
+                            <div class="col-2"><div style="background:#ffc107;color:#1a1a2e;padding:12px;border-radius:6px;"><strong style="font-size:1.5em;display:block;"><t t-esc="building.booked_count"/></strong>Booked</div></div>
+                            <div class="col-2"><div style="background:#1a1a2e;color:#e8c4f0;padding:12px;border-radius:6px;"><strong style="font-size:1.5em;display:block;"><t t-esc="'%.1f%%' % building.occupancy_rate"/></strong>Occupancy</div></div>
+                        </div>
+                        <!-- Units table -->
+                        <table class="table table-sm table-bordered" style="font-size:0.85em;">
+                            <thead style="background:#875A7B;color:white;">
+                                <tr>
+                                    <th>Unit</th><th>Type</th><th>Floor</th><th>Area (sqft)</th>
+                                    <th>Beds/Baths</th><th>Rent</th><th>Status</th><th>Tenant/Buyer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="building.unit_ids" t-as="unit">
+                                    <tr t-att-style="'background:#f0fff0;' if unit.state == 'available' else ('background:#e8f4f8;' if unit.state == 'rented' else '')">
+                                        <td><t t-esc="unit.name"/></td>
+                                        <td><t t-esc="unit.property_type"/></td>
+                                        <td><t t-esc="unit.floor"/></td>
+                                        <td><t t-esc="'%.0f' % unit.area_sqft"/></td>
+                                        <td><t t-esc="str(unit.bedrooms) + 'B/' + str(unit.bathrooms) + 'Ba'"/></td>
+                                        <td><t t-esc="unit.rent_amount"/></td>
+                                        <td><span t-att-style="'color:green;font-weight:700;' if unit.state=='available' else 'color:#17a2b8;font-weight:700;'"><t t-esc="unit.state"/></span></td>
+                                        <td><t t-esc="unit.current_tenant_id.name or ''"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_building_occupancy" model="ir.actions.report">
+        <field name="name">Occupancy Report</field>
+        <field name="model">property.building</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">leaps_property_management.report_occupancy_template</field>
+        <field name="report_file">leaps_property_management.report_occupancy_template</field>
+        <field name="binding_model_id" ref="model_property_building"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

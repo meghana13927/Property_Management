@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_property_dashboard_form" model="ir.ui.view">
+        <field name="name">property.dashboard.form</field>
+        <field name="model">property.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="لوحة تحكم إدارة العقارات" create="false" edit="false">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_refresh" type="object" string="تحديث" class="btn btn-primary" icon="fa-refresh"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1>لوحة تحكم إدارة العقارات</h1>
+                    </div>
+
+                    <!-- Row 1: Unit KPIs -->
+                    <separator string="نظرة عامة على الوحدات"/>
+                    <div class="row mb-3">
+                        <div class="col-sm-6 col-md-2 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#875A7B;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="total_units"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">إجمالي الوحدات</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#28a745;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="available_units"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">متاح</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#17a2b8;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="rented_units"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">مؤجَّر</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#ffc107;color:#1a1a2e;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="booked_units"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">محجوز</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#6c757d;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="maintenance_units"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">تحت الصيانة</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-2 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#1a1a2e;color:#e8c4f0;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="occupancy_rate" digits="[5,1]"/>%</span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">معدل الإشغال</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Financial KPIs -->
+                    <separator string="النظرة المالية"/>
+                    <div class="row mb-3">
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#155724;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:1.6em;font-weight:700;display:block;"><field name="currency_id" invisible="1"/><field name="revenue_ytd" widget="monetary"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">إيرادات منذ بداية العام</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#1e7e34;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:1.6em;font-weight:700;display:block;"><field name="revenue_mtd" widget="monetary"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">إيرادات هذا الشهر</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#856404;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:1.6em;font-weight:700;display:block;"><field name="pending_invoices" widget="monetary"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">الفواتير المعلقة</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#721c24;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:1.6em;font-weight:700;display:block;"><field name="overdue_invoices" widget="monetary"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">الفواتير المتأخرة</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Contract KPIs -->
+                    <separator string="العقود"/>
+                    <div class="row mb-3">
+                        <div class="col-sm-6 col-md-4 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#004085;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="active_contracts"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">عقود الإيجار النشطة</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#e83e8c;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="expiring_30d"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">تنتهي خلال 30 يوم</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#3d0066;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="active_sales"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">عقود البيع النشطة</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Maintenance + Commission KPIs -->
+                    <separator string="الصيانة والعمولات"/>
+                    <div class="row mb-3">
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#495057;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="open_maintenance"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">الصيانة المفتوحة</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#dc3545;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:2em;font-weight:700;display:block;"><field name="urgent_maintenance"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">الصيانة العاجلة</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#343a40;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:1.6em;font-weight:700;display:block;"><field name="maint_cost_ytd" widget="monetary"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">تكلفة الصيانة (منذ بداية العام)</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 mb-3">
+                            <div class="o_stat_info text-center p-3 rounded" style="background:#875A7B;color:white;margin:4px;">
+                                <span class="o_stat_value" style="font-size:1.6em;font-weight:700;display:block;"><field name="pending_commissions" widget="monetary"/></span>
+                                <span class="o_stat_text" style="font-size:0.85em;opacity:0.9;">العمولات المعلقة</span>
+                            </div>
+                        </div>
+                    </div>
+                    <group>
+                        <field name="paid_commissions_ytd" string="العمولات المدفوعة (منذ بداية العام)" readonly="1" widget="monetary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Dashboard -->
+    <record id="action_property_dashboard" model="ir.actions.act_window">
+        <field name="name">لوحة التحكم</field>
+        <field name="res_model">property.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">main</field>
+        <field name="context">{'form_view_initial_mode': 'readonly'}</field>
+    </record>
+</odoo>

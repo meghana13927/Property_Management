@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rental_contract_list" model="ir.ui.view">
+        <field name="name">property.rental.contract.list</field>
+        <field name="model">property.rental.contract</field>
+        <field name="arch" type="xml">
+            <list string="عقود الإيجار"
+                decoration-info="state == 'active'"
+                decoration-muted="state in ['expired','terminated']">
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="tenant_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="payment_term"/>
+                <field name="rent_amount"/>
+                <field name="security_deposit"/>
+                <field name="invoice_count"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'active'"
+                    decoration-warning="state == 'draft'"
+                    decoration-muted="state in ['expired','terminated']"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rental_contract_form" model="ir.ui.view">
+        <field name="name">property.rental.contract.form</field>
+        <field name="model">property.rental.contract</field>
+        <field name="arch" type="xml">
+            <form string="عقد إيجار">
+                <header>
+                    <button name="action_activate" string="تفعيل" type="object"
+                        class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_generate_invoices" string="إنشاء الفواتير"
+                        type="object" class="btn-secondary" invisible="state != 'active'"/>
+                    <button name="action_terminate" string="إنهاء العقد" type="object"
+                        invisible="state not in ['active']"
+                        confirm="هل أنت متأكد من إنهاء هذا العقد؟"/>
+                    <button name="action_expire" string="تعيين كمنتهي" type="object"
+                        invisible="state not in ['active']"/>
+                    <button name="action_draft" string="إعادة إلى المسودة" type="object"
+                        invisible="state not in ['terminated','expired']"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,active,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                            name="action_view_invoices" icon="fa-usd">
+                            <field name="invoice_count" widget="statinfo" string="الفواتير"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                            name="action_view_commissions" icon="fa-percent">
+                            <field name="commission_count" widget="statinfo" string="العمولات"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="تفاصيل العقد">
+                            <field name="unit_id"/>
+                            <field name="tenant_id"/>
+                            <field name="owner_id" readonly="1"/>
+                        </group>
+                        <group string="الفترة والشروط">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="payment_term"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="المعلومات المالية">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="rent_amount"/>
+                            <field name="security_deposit"/>
+                            <field name="admin_fee"/>
+                            <field name="total_invoiced" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="الشروط والملاحظات" name="notes_page">
+                            <field name="notes" placeholder="شروط العقد والأحكام الخاصة..."/>
+                        </page>
+                        <page string="🇸🇦 ريرا / المملكة العربية السعودية" name="rega_page">
+                            <!-- Info banner -->
+                            <div class="alert alert-info mb-3" role="alert">
+                                <strong>🇸🇦 الهيئة العامة للعقار (ريرا) — المملكة العربية السعودية</strong><br/>
+                                تأجير: <strong>2.5%</strong> من إيجار السنة الأولى (يدفعها المستأجر) |
+                                إدارة: <strong>5–8%</strong> سكني / <strong>7–12%</strong> تجاري |
+                                ضريبة القيمة المضافة: <strong>15%</strong> للمسجلين في ضريبة القيمة المضافة |
+                                إيجار: يجب تسجيل جميع عقود الإيجار السكنية
+                            </div>
+                            <group>
+                                <group string="منصة إيجار">
+                                    <field name="is_renewal"/>
+                                    <field name="ejar_registration_no"/>
+                                    <field name="ejar_fee"
+                                           invisible="not is_renewal"
+                                           help="125 ريال — رسوم المنصة للسكن (يدفعها المالك)"/>
+                                    <field name="renewal_admin_fee"
+                                           invisible="not is_renewal"
+                                           help="رسوم إدارية ثابتة 200–500 ريال. تحل محل عمولة 2.5% عند التجديد."/>
+                                </group>
+                                <group string="عمولة التأجير (لمرة واحدة)">
+                                    <field name="leasing_commission_rate"
+                                           invisible="is_renewal"
+                                           help="معيار ريرا: 2.5% من إجمالي إيجار السنة الأولى"/>
+                                    <field name="leasing_commission_amount"
+                                           readonly="1" invisible="is_renewal"/>
+                                    <field name="tenant_pays_commission"
+                                           invisible="is_renewal"/>
+                                    <field name="vat_applicable"/>
+                                    <field name="vat_amount"
+                                           readonly="1" invisible="not vat_applicable"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="رسوم إدارة العقار (سنوية)">
+                                    <field name="management_fee_type"/>
+                                    <field name="management_fee_rate"
+                                           help="سكني: 5–8% | تجاري: 7–12%"/>
+                                    <field name="management_fee_amount" readonly="1"/>
+                                </group>
+                                <group string="دليل تعويض الوكيل">
+                                    <div style="background:#f8f9fa;padding:12px;border-radius:6px;border:1px solid #dee2e6;">
+                                        <table style="width:100%;font-size:0.85em;border-collapse:collapse;">
+                                            <tr><td style="padding:4px 0;color:#666;">الراتب الأساسي (سوقي):</td><td style="font-weight:700;">4,000 – 8,000 ريال</td></tr>
+                                            <tr><td style="padding:4px 0;color:#666;">عمولة التأجير:</td><td style="font-weight:700;">25% – 30% من 2.5%</td></tr>
+                                            <tr><td style="padding:4px 0;color:#666;">مكافأة التحصيل:</td><td style="font-weight:700;">1% – 2% (استرداد الديون المعدومة)</td></tr>
+                                            <tr><td style="padding:4px 0;color:#666;">مكافأة مؤشر الأداء:</td><td style="font-weight:700;">إذا تجاوزت نسبة الإشغال 95%</td></tr>
+                                            <tr><td style="padding:4px 0;color:#666;">رخصة فال:</td><td style="font-weight:700;color:#dc3545;">مطلوبة من ريرا</td></tr>
+                                        </table>
+                                    </div>
+                                </group>
+                            </group>
+                            <group string="سجلات العمولات">
+                                <field name="commission_ids" nolabel="1">
+                                    <list editable="bottom">
+                                        <field name="name" readonly="1"/>
+                                        <field name="commission_type"/>
+                                        <field name="agent_id"/>
+                                        <field name="fal_license_no" readonly="1"/>
+                                        <field name="company_commission_amount" readonly="1" string="عمولة الشركة"/>
+                                        <field name="agent_amount" readonly="1"/>
+                                        <field name="vat_amount" readonly="1"/>
+                                        <field name="total_with_vat" readonly="1"/>
+                                        <field name="state" widget="badge"/>
+                                        <field name="currency_id" column_invisible="1"/>
+                                    </list>
+                                </field>
+                                <div class="mt-2">
+                                    <button name="action_create_leasing_commission"
+                                            string="+ إنشاء عمولة تأجير"
+                                            type="object" class="btn btn-sm btn-outline-primary"
+                                            invisible="is_renewal"/>
+                                </div>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_rental_contract_search" model="ir.ui.view">
+        <field name="name">property.rental.contract.search</field>
+        <field name="model">property.rental.contract</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="tenant_id"/>
+                <filter string="نشط" name="active" domain="[('state','=','active')]"/>
+                <filter string="مسودة" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="منتهي" name="expired" domain="[('state','=','expired')]"/>
+                <group>
+                    <filter string="الحالة" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="شروط الدفع" name="group_payment_term" context="{'group_by': 'payment_term'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_rental_contract" model="ir.actions.act_window">
+        <field name="name">عقود الإيجار</field>
+        <field name="res_model">property.rental.contract</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أنشئ أول عقد إيجار</p>
+        </field>
+    </record>
+
+    <record id="view_rental_contract_graph" model="ir.ui.view">
+        <field name="name">property.rental.contract.graph</field>
+        <field name="model">property.rental.contract</field>
+        <field name="arch" type="xml">
+            <graph string="إيرادات الإيجار" type="bar" sample="1">
+                <field name="date_start" interval="month" type="row"/>
+                <field name="rent_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_rental_contract_pivot" model="ir.ui.view">
+        <field name="name">property.rental.contract.pivot</field>
+        <field name="model">property.rental.contract</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل الإيجار" sample="1">
+                <field name="payment_term" type="row"/>
+                <field name="state" type="col"/>
+                <field name="rent_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+</odoo>

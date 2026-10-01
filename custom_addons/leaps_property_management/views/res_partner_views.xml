@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- إضافة تبويب ريرا / رخصة فال إلى نموذج res.partner -->
+    <record id="view_partner_property_agent_form" model="ir.ui.view">
+        <field name="name">res.partner.property.agent.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="🇸🇦 ريرا / العقارات" name="rega_tab"
+                      invisible="not is_property_agent">
+                    <group>
+                        <group string="تفاصيل الوكيل / الوسيط">
+                            <field name="is_property_agent"/>
+                            <field name="fal_license_no"
+                                   help="رقم رخصة فال من الهيئة العامة للعقار (ريرا). مطلوبة لجميع أنشطة الوساطة."/>
+                            <field name="fal_expiry_date"
+                                   help="تأكد من تجديد رخصة فال قبل انتهاء صلاحيتها."/>
+                            <field name="rega_registered"/>
+                        </group>
+                        <group string="ضريبة القيمة المضافة (المملكة العربية السعودية)">
+                            <field name="vat_registered_ksa"/>
+                            <field name="vat_no_ksa"
+                                   invisible="not vat_registered_ksa"
+                                   help="رقم تسجيل ضريبة القيمة المضافة. يجب إضافة 15% ضريبة قيمة مضافة على جميع العمولات والرسوم للمسجلين."/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>⚖️ اشتراط رخصة فال:</strong>
+                        يجب على كل وكيل عقاري ووسيط في المملكة العربية السعودية أن يحمل
+                        <strong>رخصة فال</strong> سارية المفعول صادرة من ريرا لممارسة أي
+                        نشاط وساطة أو إدارة عقارات بصورة قانونية. العمل بدون رخصة فال
+                        يُعدّ مخالفة لنظام العقارات السعودي.
+                    </div>
+                </page>
+            </notebook>
+            <!-- إظهار شارة ريرا في قائمة الشركاء إذا كان وكيلاً -->
+            <field name="is_property_agent" invisible="1" position="after">
+                <field name="fal_license_no" invisible="1"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- تفعيل خانة اختيار is_property_agent في نموذج الشريك القياسي -->
+    <record id="view_partner_property_agent_checkbox" model="ir.ui.view">
+        <field name="name">res.partner.property.agent.checkbox</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="website" position="after">
+                <field name="is_property_agent" widget="boolean_toggle"/>
+            </field>
+        </field>
+    </record>
+</odoo>

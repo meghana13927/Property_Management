@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sales_contract_list" model="ir.ui.view">
+        <field name="name">property.sales.contract.list</field>
+        <field name="model">property.sales.contract</field>
+        <field name="arch" type="xml">
+            <list string="عقود البيع"
+                decoration-success="state == 'completed'"
+                decoration-info="state in ['booked','spa']"
+                decoration-muted="state == 'cancelled'">
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="buyer_id"/>
+                <field name="date_contract"/>
+                <field name="agreed_price"/>
+                <field name="booking_amount"/>
+                <field name="total_paid"/>
+                <field name="balance_due"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'completed'"
+                    decoration-info="state in ['booked','spa']"
+                    decoration-warning="state == 'draft'"
+                    decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sales_contract_form" model="ir.ui.view">
+        <field name="name">property.sales.contract.form</field>
+        <field name="model">property.sales.contract</field>
+        <field name="arch" type="xml">
+            <form string="عقد بيع">
+                <header>
+                    <button name="action_book" string="تأكيد الحجز" type="object"
+                        class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_sign_spa" string="توقيع عقد البيع" type="object"
+                        class="btn-primary" invisible="state != 'booked'"/>
+                    <button name="action_complete" string="تعيين كمكتمل" type="object"
+                        class="btn-success" invisible="state != 'spa'"/>
+                    <button name="action_cancel" string="إلغاء" type="object"
+                        invisible="state in ['completed','cancelled']"
+                        confirm="إلغاء عقد البيع هذا؟"/>
+                    <button name="action_draft" string="إعادة إلى المسودة" type="object"
+                        invisible="state not in ['cancelled']"/>
+                    <field name="state" widget="statusbar"
+                        statusbar_visible="draft,booked,spa,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object"
+                            name="action_view_invoices" icon="fa-usd">
+                            <field name="invoice_count" widget="statinfo" string="الفواتير"/>
+                        </button>
+                        <button class="oe_stat_button" type="object"
+                            name="action_view_commissions" icon="fa-money">
+                            <field name="commission_count" widget="statinfo" string="العمولات"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="العقار والأطراف">
+                            <field name="unit_id"/>
+                            <field name="buyer_id"/>
+                            <field name="seller_id" readonly="1"/>
+                        </group>
+                        <group string="التواريخ">
+                            <field name="date_contract"/>
+                            <field name="date_completion"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="التسعير">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="sale_price" readonly="1"/>
+                            <field name="agreed_price"/>
+                            <field name="booking_amount"/>
+                            <field name="down_payment"/>
+                        </group>
+                        <group string="الرسوم والتكاليف">
+                            <field name="admin_fee"/>
+                            <field name="stamp_duty"/>
+                            <field name="registration_fee"/>
+                            <field name="total_paid" readonly="1"/>
+                            <field name="balance_due" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="خطة الدفع">
+                            <field name="payment_plan_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="due_date"/>
+                                    <field name="amount"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'paid'"
+                                        decoration-danger="state == 'overdue'"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="العمولات" name="commissions_page">
+                            <field name="commission_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="commission_type"/>
+                                    <field name="company_commission_rate" string="نسبة الشركة %"/>
+                                    <field name="company_commission_amount" string="عمولة الشركة"/>
+                                    <field name="agent_amount" string="عمولة الوكيل"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'paid'"
+                                        decoration-info="state == 'approved'"
+                                        decoration-warning="state == 'invoiced'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="الشروط والملاحظات">
+                            <field name="notes" placeholder="شروط العقد والأحكام الخاصة..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sales_contract_search" model="ir.ui.view">
+        <field name="name">property.sales.contract.search</field>
+        <field name="model">property.sales.contract</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="unit_id"/>
+                <field name="buyer_id"/>
+                <filter string="مسودة" name="filter_draft" domain="[('state','=','draft')]"/>
+                <filter string="محجوز" name="filter_booked" domain="[('state','=','booked')]"/>
+                <filter string="موقّع عقد البيع" name="filter_spa" domain="[('state','=','spa')]"/>
+                <filter string="مكتمل" name="filter_completed" domain="[('state','=','completed')]"/>
+                <group>
+                    <filter string="الحالة" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sales_contract" model="ir.actions.act_window">
+        <field name="name">عقود البيع</field>
+        <field name="res_model">property.sales.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">أنشئ أول عقد بيع</p>
+        </field>
+    </record>
+</odoo>
