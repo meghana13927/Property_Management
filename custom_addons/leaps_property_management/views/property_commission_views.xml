@@ -1,231 +1,724 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <odoo>
 
-    <!-- ══════════════════════════════════════════════════════════
+    <!-- ==========================================================
          LIST VIEW
-    ══════════════════════════════════════════════════════════ -->
+    ========================================================== -->
+
     <record id="view_property_commission_list" model="ir.ui.view">
+
         <field name="name">property.commission.list</field>
+
         <field name="model">property.commission</field>
+
         <field name="arch" type="xml">
-            <list string="عمولات ريرا والرسوم"
-                  decoration-success="state == 'paid'"
-                  decoration-info="state == 'approved'"
-                  decoration-muted="state == 'draft'">
+
+            <list
+                string="REGA Commissions and Fees"
+                decoration-success="state == 'paid'"
+                decoration-info="state == 'approved'"
+                decoration-muted="state == 'draft'"
+            >
+
                 <field name="name"/>
+
                 <field name="commission_type"/>
+
                 <field name="rental_contract_id"/>
-                <field name="sales_contract_id" optional="show"/>
+
+                <field
+                    name="sales_contract_id"
+                    optional="show"
+                />
+
                 <field name="unit_id"/>
+
                 <field name="agent_id"/>
+
                 <field name="fal_license_no"/>
+
                 <field name="date"/>
-                <field name="company_commission_rate" string="نسبة الشركة %"/>
-                <field name="company_commission_amount" string="عمولة الشركة"/>
-                <field name="agent_share_rate" string="نسبة الوكيل %"/>
-                <field name="agent_amount" string="عمولة الوكيل"/>
-                <field name="vat_applicable" optional="show"/>
-                <field name="vat_amount" optional="show"/>
+
+                <field
+                    name="company_commission_rate"
+                    string="Company Rate %"
+                />
+
+                <field
+                    name="company_commission_amount"
+                    string="Company Commission"
+                />
+
+                <field
+                    name="agent_share_rate"
+                    string="Agent Share %"
+                />
+
+                <field
+                    name="agent_amount"
+                    string="Agent Commission"
+                />
+
+                <field
+                    name="vat_applicable"
+                    optional="show"
+                />
+
+                <field
+                    name="vat_amount"
+                    optional="show"
+                />
+
                 <field name="total_with_vat"/>
-                <field name="state" widget="badge"
-                       decoration-info="state == 'approved'"
-                       decoration-warning="state == 'invoiced'"
-                       decoration-success="state == 'paid'"/>
-                <field name="currency_id" column_invisible="1"/>
+
+                <field
+                    name="state"
+                    widget="badge"
+                    decoration-info="state == 'approved'"
+                    decoration-warning="state == 'invoiced'"
+                    decoration-success="state == 'paid'"
+                />
+
+                <field
+                    name="currency_id"
+                    column_invisible="1"
+                />
+
             </list>
+
         </field>
+
     </record>
 
-    <!-- ══════════════════════════════════════════════════════════
+
+    <!-- ==========================================================
          FORM VIEW
-    ══════════════════════════════════════════════════════════ -->
+    ========================================================== -->
+
     <record id="view_property_commission_form" model="ir.ui.view">
+
         <field name="name">property.commission.form</field>
+
         <field name="model">property.commission</field>
+
         <field name="arch" type="xml">
-            <form string="عمولة / رسوم ريرا">
+
+            <form string="REGA Commission / Fee">
+
                 <header>
-                    <button name="action_approve" string="اعتماد"
-                            type="object" class="btn-primary"
-                            invisible="state not in ('draft',)"/>
-                    <button name="action_invoice" string="تعيين كمُفوتَر"
-                            type="object" class="btn-secondary"
-                            invisible="state not in ('approved',)"/>
-                    <button name="action_paid" string="تعيين كمدفوع"
-                            type="object" class="btn-success"
-                            invisible="state not in ('invoiced',)"/>
-                    <button name="action_reset" string="إعادة إلى المسودة"
-                            type="object"
-                            invisible="state not in ('approved',)"/>
-                    <field name="state" widget="statusbar"
-                           statusbar_visible="draft,approved,invoiced,paid"/>
+
+                    <button
+                        name="action_approve"
+                        string="Approve"
+                        type="object"
+                        class="btn-primary"
+                        invisible="state not in ('draft',)"
+                    />
+
+                    <button
+                        name="action_invoice"
+                        string="Mark as Invoiced"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="state not in ('approved',)"
+                    />
+
+                    <button
+                        name="action_paid"
+                        string="Mark as Paid"
+                        type="object"
+                        class="btn-success"
+                        invisible="state not in ('invoiced',)"
+                    />
+
+                    <button
+                        name="action_reset"
+                        string="Reset to Draft"
+                        type="object"
+                        invisible="state not in ('approved',)"
+                    />
+
+                    <field
+                        name="state"
+                        widget="statusbar"
+                        statusbar_visible="draft,approved,invoiced,paid"
+                    />
+
                 </header>
+
+
                 <sheet>
+
+                    <!-- SMART BUTTON -->
+
                     <div class="oe_button_box" name="button_box">
-                        <button class="oe_stat_button" type="object"
-                                name="action_view_vendor_bill" icon="fa-file-text-o"
-                                invisible="vendor_bill_count == 0">
-                            <field name="vendor_bill_count" widget="statinfo" string="فاتورة الوكيل"/>
+
+                        <button
+                            class="oe_stat_button"
+                            type="object"
+                            name="action_view_vendor_bill"
+                            icon="fa-file-text-o"
+                            invisible="vendor_bill_count == 0"
+                        >
+
+                            <field
+                                name="vendor_bill_count"
+                                widget="statinfo"
+                                string="Agent Bill"
+                            />
+
                         </button>
+
                     </div>
-                    <!-- REGA info banner -->
-                    <div class="alert alert-info" role="alert"
-                         invisible="commission_type != 'leasing'">
-                        <strong>🇸🇦 معيار ريرا (عمولة التأجير):</strong>
-                        2.5% من إيجار السنة الأولى · يدفعها المستأجر · الوكيل يستلم 25–30% · 15% ضريبة القيمة المضافة للمسجلين
+
+
+                    <!-- ==================================================
+                         REGA INFORMATION
+                    ================================================== -->
+
+                    <div
+                        class="alert alert-info"
+                        role="alert"
+                        invisible="commission_type != 'leasing'"
+                    >
+
+                        <strong>
+                            🇸🇦 REGA Standard (Leasing Commission):
+                        </strong>
+
+                        2.5% of first-year rent · paid by tenant ·
+                        agent receives 25–30% ·
+                        15% VAT for VAT-registered taxpayers
+
                     </div>
-                    <div class="alert alert-warning" role="alert"
-                         invisible="commission_type != 'renewal'">
-                        <strong>⚠️ قاعدة إيجار / ريرا للتجديد:</strong>
-                        يُعدّ فرض عمولة 2.5% مرة أخرى عند التجديد <strong>مخالفاً للنظام</strong>.
-                        استخدم رسوم إدارية ثابتة من 200 إلى 500 ريال بدلاً من ذلك.
+
+
+                    <div
+                        class="alert alert-warning"
+                        role="alert"
+                        invisible="commission_type != 'renewal'"
+                    >
+
+                        <strong>
+                            ⚠️ Ejar / REGA Renewal Rule:
+                        </strong>
+
+                        Charging a 2.5% commission again upon renewal
+                        is considered
+                        <strong>non-compliant with the regulations</strong>.
+
+                        Use a fixed administrative fee of
+                        SAR 200–500 instead.
+
                     </div>
-                    <div class="alert alert-info" role="alert"
-                         invisible="commission_type != 'management'">
-                        <strong>🇸🇦 معيار ريرا (رسوم الإدارة):</strong>
-                        سكني: 5–8% | تجاري: 7–12% من الإيجار السنوي المحصّل.
-                        الوكيل/المدير يستلم 0.5–1.5% حافزاً من إجمالي التحصيلات.
+
+
+                    <div
+                        class="alert alert-info"
+                        role="alert"
+                        invisible="commission_type != 'management'"
+                    >
+
+                        <strong>
+                            🇸🇦 REGA Standard (Management Fees):
+                        </strong>
+
+                        Residential: 5–8% |
+                        Commercial: 7–12%
+                        of annual rent collected.
+
+                        Agent/manager receives a 0.5–1.5%
+                        incentive from total collections.
+
                     </div>
+
+
+                    <!-- TITLE -->
 
                     <div class="oe_title">
-                        <h1><field name="name" readonly="1"/></h1>
+
+                        <h1>
+                            <field
+                                name="name"
+                                readonly="1"
+                            />
+                        </h1>
+
                     </div>
 
+
+                    <!-- ==================================================
+                         COMMISSION DETAILS
+                    ================================================== -->
+
                     <group>
-                        <group string="تفاصيل العمولة">
+
+                        <group string="Commission Details">
+
                             <field name="commission_type"/>
-                            <field name="rental_contract_id"
-                                   options="{'no_create': True}"/>
-                            <field name="sales_contract_id"
-                                   options="{'no_create': True}"/>
-                            <field name="unit_id" readonly="1"/>
+
+                            <field
+                                name="rental_contract_id"
+                                options="{'no_create': True}"
+                            />
+
+                            <field
+                                name="sales_contract_id"
+                                options="{'no_create': True}"
+                            />
+
+                            <field
+                                name="unit_id"
+                                readonly="1"
+                            />
+
                             <field name="date"/>
+
                             <field name="payer"/>
+
                         </group>
-                        <group string="الوكيل / الوسيط">
-                            <field name="agent_id"
-                                   options="{'no_create': True}"
-                                   domain="[('is_property_agent','=',True)]"/>
-                            <field name="fal_license_no" readonly="1"/>
-                            <field name="fal_expiry_date" readonly="1"/>
+
+
+                        <group string="Agent / Broker">
+
+                            <field
+                                name="agent_id"
+                                options="{'no_create': True}"
+                                domain="[('is_property_agent','=',True)]"
+                            />
+
+                            <field
+                                name="fal_license_no"
+                                readonly="1"
+                            />
+
+                            <field
+                                name="fal_expiry_date"
+                                readonly="1"
+                            />
+
                             <field name="ejar_registration_no"/>
+
                         </group>
+
                     </group>
 
-                    <group string="حساب العمولة (ريرا)">
+
+                    <!-- ==================================================
+                         COMMISSION CALCULATION
+                    ================================================== -->
+
+                    <group string="Commission Calculation (REGA)">
+
                         <group>
-                            <field name="currency_id" invisible="1"/>
-                            <field name="base_rent_amount"
-                                   help="الإيجار السنوي = الإيجار الشهري × 12"/>
-                            <field name="company_commission_rate"
-                                   help="معيار ريرا: 2.5% للتأجير"/>
-                            <field name="company_commission_amount" readonly="1"/>
+
+                            <field
+                                name="currency_id"
+                                invisible="1"
+                            />
+
+                            <field
+                                name="base_rent_amount"
+                                help="Annual rent = monthly rent × 12"
+                            />
+
+                            <field
+                                name="company_commission_rate"
+                                help="REGA standard: 2.5% for leasing"
+                            />
+
+                            <field
+                                name="company_commission_amount"
+                                readonly="1"
+                            />
+
                         </group>
+
+
                         <group>
-                            <field name="agent_share_rate"
-                                   help="المعيار السوقي: 25–30% من عمولة الشركة"/>
-                            <field name="agent_amount" readonly="1"/>
+
+                            <field
+                                name="agent_share_rate"
+                                help="Market standard: 25–30% of company commission"
+                            />
+
+                            <field
+                                name="agent_amount"
+                                readonly="1"
+                            />
+
                             <field name="vat_applicable"/>
-                            <field name="vat_rate" invisible="not vat_applicable"/>
-                            <field name="vat_amount" readonly="1"
-                                   invisible="not vat_applicable"/>
-                            <field name="total_with_vat" readonly="1"/>
+
+                            <field
+                                name="vat_rate"
+                                invisible="not vat_applicable"
+                            />
+
+                            <field
+                                name="vat_amount"
+                                readonly="1"
+                                invisible="not vat_applicable"
+                            />
+
+                            <field
+                                name="total_with_vat"
+                                readonly="1"
+                            />
+
                         </group>
+
                     </group>
+
+
+                    <!-- ==================================================
+                         NOTEBOOK
+                    ================================================== -->
 
                     <notebook>
-                        <page string="ملاحظات" name="notes_page">
-                            <field name="notes" placeholder="ملاحظات إضافية حول هذه العمولة..."/>
+
+
+                        <!-- NOTES -->
+
+                        <page
+                            string="Notes"
+                            name="notes_page"
+                        >
+
+                            <field
+                                name="notes"
+                                placeholder="Additional notes about this commission..."
+                            />
+
                         </page>
-                        <page string="مرجع ريرا" name="rega_ref">
-                            <div class="alert alert-secondary" role="alert">
-                                <strong>📋 جدول رسوم ريرا القياسي — المملكة العربية السعودية</strong>
+
+
+                        <!-- REGA REFERENCE -->
+
+                        <page
+                            string="REGA Reference"
+                            name="rega_ref"
+                        >
+
+                            <div
+                                class="alert alert-secondary"
+                                role="alert"
+                            >
+
+                                <strong>
+                                    📋 Standard REGA Fee Schedule —
+                                    Saudi Arabia
+                                </strong>
+
                             </div>
+
+
                             <group>
-                                <group string="عمولة التأجير">
-                                    <field name="company_commission_rate" readonly="1" string="النسبة (ريرا: 2.5%)"/>
-                                    <field name="payer" readonly="1" string="الدافع (ريرا: المستأجر)"/>
-                                    <field name="agent_share_rate" readonly="1" string="حصة الوكيل (25-30%)"/>
+
+
+                                <!-- LEASING -->
+
+                                <group string="Leasing Commission">
+
+                                    <field
+                                        name="company_commission_rate"
+                                        readonly="1"
+                                        string="Rate (REGA: 2.5%)"
+                                    />
+
+                                    <field
+                                        name="payer"
+                                        readonly="1"
+                                        string="Payer (REGA: Tenant)"
+                                    />
+
+                                    <field
+                                        name="agent_share_rate"
+                                        readonly="1"
+                                        string="Agent Share (25–30%)"
+                                    />
+
                                 </group>
-                                <group string="رسوم الإدارة (سنوية)">
-                                    <span class="o_form_label">سكني</span>
-                                    <span>5% – 8% من الإيجار المحصَّل</span>
-                                    <span class="o_form_label">تجاري</span>
-                                    <span>7% – 12% من الإيجار المحصَّل</span>
-                                    <span class="o_form_label">حافز الوكيل</span>
-                                    <span>0.5% – 1.5% من التحصيلات السنوية</span>
+
+
+                                <!-- MANAGEMENT -->
+
+                                <group string="Management Fees (Annual)">
+
+                                    <span class="o_form_label">
+                                        Residential
+                                    </span>
+
+                                    <span>
+                                        5% – 8% of collected rent
+                                    </span>
+
+
+                                    <span class="o_form_label">
+                                        Commercial
+                                    </span>
+
+                                    <span>
+                                        7% – 12% of collected rent
+                                    </span>
+
+
+                                    <span class="o_form_label">
+                                        Agent Incentive
+                                    </span>
+
+                                    <span>
+                                        0.5% – 1.5% of annual collections
+                                    </span>
+
                                 </group>
+
                             </group>
+
+
                             <group>
-                                <group string="رسوم التجديد (إيجار)">
-                                    <span class="o_form_label">رسوم منصة إيجار</span>
-                                    <span>125 ريال (يدفعها المالك)</span>
-                                    <span class="o_form_label">الرسوم الإدارية</span>
-                                    <span>200 – 500 ريال ثابتة (تحل محل 2.5%)</span>
-                                    <span class="o_form_label">2.5% عند التجديد</span>
-                                    <span style="color:red;font-weight:700;">مخالف لنظام ريرا/إيجار</span>
+
+
+                                <!-- RENEWAL -->
+
+                                <group string="Renewal Fees (Ejar)">
+
+                                    <span class="o_form_label">
+                                        Ejar Platform Fee
+                                    </span>
+
+                                    <span>
+                                        SAR 125 (paid by landlord)
+                                    </span>
+
+
+                                    <span class="o_form_label">
+                                        Administrative Fee
+                                    </span>
+
+                                    <span>
+                                        Fixed SAR 200 – 500
+                                        (replaces 2.5%)
+                                    </span>
+
+
+                                    <span class="o_form_label">
+                                        2.5% on Renewal
+                                    </span>
+
+                                    <span
+                                        style="color:red;font-weight:700;"
+                                    >
+                                        Non-compliant with REGA/Ejar regulations
+                                    </span>
+
                                 </group>
-                                <group string="ضريبة القيمة المضافة والنظام">
-                                    <span class="o_form_label">نسبة ضريبة القيمة المضافة (المملكة)</span>
-                                    <span>15% — للمسجلين في ضريبة القيمة المضافة</span>
-                                    <span class="o_form_label">رخصة فال</span>
-                                    <span>مطلوبة من ريرا لجميع الوكلاء</span>
-                                    <span class="o_form_label">تسجيل إيجار</span>
-                                    <span>إلزامي لجميع عقود الإيجار السكنية</span>
+
+
+                                <!-- VAT AND COMPLIANCE -->
+
+                                <group string="VAT and Compliance">
+
+                                    <span class="o_form_label">
+                                        VAT Rate (Saudi Arabia)
+                                    </span>
+
+                                    <span>
+                                        15% — for VAT-registered taxpayers
+                                    </span>
+
+
+                                    <span class="o_form_label">
+                                        FAL License
+                                    </span>
+
+                                    <span>
+                                        Required by REGA for all agents
+                                    </span>
+
+
+                                    <span class="o_form_label">
+                                        Ejar Registration
+                                    </span>
+
+                                    <span>
+                                        Mandatory for all residential
+                                        lease contracts
+                                    </span>
+
                                 </group>
+
                             </group>
+
                         </page>
+
                     </notebook>
+
                 </sheet>
+
                 <chatter/>
+
             </form>
+
         </field>
+
     </record>
 
-    <!-- ══════════════════════════════════════════════════════════
+
+    <!-- ==========================================================
          SEARCH VIEW
-    ══════════════════════════════════════════════════════════ -->
+    ========================================================== -->
+
     <record id="view_property_commission_search" model="ir.ui.view">
+
         <field name="name">property.commission.search</field>
+
         <field name="model">property.commission</field>
+
         <field name="arch" type="xml">
-            <search string="عمولات ريرا">
+
+            <search string="REGA Commissions">
+
                 <field name="name"/>
+
                 <field name="agent_id"/>
+
                 <field name="rental_contract_id"/>
+
                 <field name="sales_contract_id"/>
+
                 <field name="unit_id"/>
+
+
                 <separator/>
-                <filter name="filter_leasing"    string="تأجير"    domain="[('commission_type','=','leasing')]"/>
-                <filter name="filter_management" string="إدارة"    domain="[('commission_type','=','management')]"/>
-                <filter name="filter_renewal"    string="تجديد"    domain="[('commission_type','=','renewal')]"/>
+
+
+                <!-- COMMISSION TYPE -->
+
+                <filter
+                    name="filter_leasing"
+                    string="Leasing"
+                    domain="[('commission_type','=','leasing')]"
+                />
+
+                <filter
+                    name="filter_management"
+                    string="Management"
+                    domain="[('commission_type','=','management')]"
+                />
+
+                <filter
+                    name="filter_renewal"
+                    string="Renewal"
+                    domain="[('commission_type','=','renewal')]"
+                />
+
+
                 <separator/>
-                <filter name="filter_draft"    string="مسودة"   domain="[('state','=','draft')]"/>
-                <filter name="filter_approved" string="معتمد"   domain="[('state','=','approved')]"/>
-                <filter name="filter_paid"     string="مدفوع"   domain="[('state','=','paid')]"/>
-                <filter name="filter_vat"      string="خاضع لضريبة القيمة المضافة" domain="[('vat_applicable','=',True)]"/>
+
+
+                <!-- STATUS -->
+
+                <filter
+                    name="filter_draft"
+                    string="Draft"
+                    domain="[('state','=','draft')]"
+                />
+
+                <filter
+                    name="filter_approved"
+                    string="Approved"
+                    domain="[('state','=','approved')]"
+                />
+
+                <filter
+                    name="filter_paid"
+                    string="Paid"
+                    domain="[('state','=','paid')]"
+                />
+
+                <filter
+                    name="filter_vat"
+                    string="VAT Applicable"
+                    domain="[('vat_applicable','=',True)]"
+                />
+
+
                 <separator/>
+
+
+                <!-- GROUP BY -->
+
                 <group>
-                    <filter name="group_type"   string="النوع"    context="{'group_by':'commission_type'}"/>
-                    <filter name="group_agent"  string="الوكيل"   context="{'group_by':'agent_id'}"/>
-                    <filter name="group_state"  string="الحالة"   context="{'group_by':'state'}"/>
-                    <filter name="group_month"  string="الشهر"    context="{'group_by':'date:month'}"/>
+
+                    <filter
+                        name="group_type"
+                        string="Type"
+                        context="{'group_by':'commission_type'}"
+                    />
+
+                    <filter
+                        name="group_agent"
+                        string="Agent"
+                        context="{'group_by':'agent_id'}"
+                    />
+
+                    <filter
+                        name="group_state"
+                        string="Status"
+                        context="{'group_by':'state'}"
+                    />
+
+                    <filter
+                        name="group_month"
+                        string="Month"
+                        context="{'group_by':'date:month'}"
+                    />
+
                 </group>
+
             </search>
+
         </field>
+
     </record>
 
-    <!-- ══════════════════════════════════════════════════════════
+
+    <!-- ==========================================================
          ACTION
-    ══════════════════════════════════════════════════════════ -->
-    <record id="action_property_commission" model="ir.actions.act_window">
-        <field name="name">عمولات ريرا والرسوم</field>
-        <field name="res_model">property.commission</field>
-        <field name="view_mode">list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">لا توجد سجلات عمولات بعد!</p>
-            <p>أنشئ سجل عمولة لتتبع رسوم التأجير والإدارة والتجديد وفق أنظمة ريرا.</p>
+    ========================================================== -->
+
+    <record
+        id="action_property_commission"
+        model="ir.actions.act_window"
+    >
+
+        <field name="name">
+            REGA Commissions and Fees
         </field>
+
+        <field name="res_model">
+            property.commission
+        </field>
+
+        <field name="view_mode">
+            list,form
+        </field>
+
+        <field name="help" type="html">
+
+            <p class="o_view_nocontent_smiling_face">
+                No commission records yet!
+            </p>
+
+            <p>
+                Create a commission record to track leasing,
+                management, and renewal fees according to
+                REGA regulations.
+            </p>
+
+        </field>
+
     </record>
 
 </odoo>

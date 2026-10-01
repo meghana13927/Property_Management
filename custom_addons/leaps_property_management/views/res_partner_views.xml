@@ -1,55 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <odoo>
-    <!-- إضافة تبويب ريرا / رخصة فال إلى نموذج res.partner -->
+
+    <!-- Add REGA / FAL License tab to res.partner form -->
     <record id="view_partner_property_agent_form" model="ir.ui.view">
+
         <field name="name">res.partner.property.agent.form</field>
+
         <field name="model">res.partner</field>
+
         <field name="inherit_id" ref="base.view_partner_form"/>
+
         <field name="arch" type="xml">
+
             <notebook position="inside">
-                <page string="🇸🇦 ريرا / العقارات" name="rega_tab"
-                      invisible="not is_property_agent">
+
+                <page
+                    string="🇸🇦 REGA / Real Estate"
+                    name="rega_tab"
+                    invisible="not is_property_agent"
+                >
+
                     <group>
-                        <group string="تفاصيل الوكيل / الوسيط">
+
+                        <group string="Agent / Broker Details">
+
                             <field name="is_property_agent"/>
-                            <field name="fal_license_no"
-                                   help="رقم رخصة فال من الهيئة العامة للعقار (ريرا). مطلوبة لجميع أنشطة الوساطة."/>
-                            <field name="fal_expiry_date"
-                                   help="تأكد من تجديد رخصة فال قبل انتهاء صلاحيتها."/>
+
+                            <field
+                                name="fal_license_no"
+                                help="FAL license number issued by the Real Estate General Authority (REGA). Required for all brokerage activities."
+                            />
+
+                            <field
+                                name="fal_expiry_date"
+                                help="Make sure the FAL license is renewed before its expiry date."
+                            />
+
                             <field name="rega_registered"/>
+
                         </group>
-                        <group string="ضريبة القيمة المضافة (المملكة العربية السعودية)">
+
+
+                        <group string="VAT (Saudi Arabia)">
+
                             <field name="vat_registered_ksa"/>
-                            <field name="vat_no_ksa"
-                                   invisible="not vat_registered_ksa"
-                                   help="رقم تسجيل ضريبة القيمة المضافة. يجب إضافة 15% ضريبة قيمة مضافة على جميع العمولات والرسوم للمسجلين."/>
+
+                            <field
+                                name="vat_no_ksa"
+                                invisible="not vat_registered_ksa"
+                                help="VAT registration number. VAT-registered entities must add 15% VAT to all commissions and fees."
+                            />
+
                         </group>
+
                     </group>
-                    <div class="alert alert-info" role="alert">
-                        <strong>⚖️ اشتراط رخصة فال:</strong>
-                        يجب على كل وكيل عقاري ووسيط في المملكة العربية السعودية أن يحمل
-                        <strong>رخصة فال</strong> سارية المفعول صادرة من ريرا لممارسة أي
-                        نشاط وساطة أو إدارة عقارات بصورة قانونية. العمل بدون رخصة فال
-                        يُعدّ مخالفة لنظام العقارات السعودي.
+
+
+                    <div
+                        class="alert alert-info"
+                        role="alert"
+                    >
+
+                        <strong>
+                            ⚖️ FAL License Requirement:
+                        </strong>
+
+                        Every real estate agent and broker in Saudi Arabia
+                        must hold a valid
+                        <strong>FAL License</strong>
+                        issued by REGA in order to legally carry out
+                        brokerage or property management activities.
+
+                        Operating without a valid FAL License
+                        is considered a violation of Saudi real estate regulations.
+
                     </div>
+
                 </page>
+
             </notebook>
-            <!-- إظهار شارة ريرا في قائمة الشركاء إذا كان وكيلاً -->
-            <field name="is_property_agent" invisible="1" position="after">
-                <field name="fal_license_no" invisible="1"/>
+
+
+            <!-- Show REGA/FAL information in partner form when applicable -->
+            <field
+                name="is_property_agent"
+                invisible="1"
+                position="after"
+            >
+
+                <field
+                    name="fal_license_no"
+                    invisible="1"
+                />
+
             </field>
+
         </field>
+
     </record>
 
-    <!-- تفعيل خانة اختيار is_property_agent في نموذج الشريك القياسي -->
-    <record id="view_partner_property_agent_checkbox" model="ir.ui.view">
-        <field name="name">res.partner.property.agent.checkbox</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <field name="website" position="after">
-                <field name="is_property_agent" widget="boolean_toggle"/>
-            </field>
+
+    <!-- Enable is_property_agent checkbox in the standard partner form -->
+    <record
+        id="view_partner_property_agent_checkbox"
+        model="ir.ui.view"
+    >
+
+        <field name="name">
+            res.partner.property.agent.checkbox
         </field>
+
+        <field name="model">
+            res.partner
+        </field>
+
+        <field
+            name="inherit_id"
+            ref="base.view_partner_form"
+        />
+
+        <field name="arch" type="xml">
+
+            <field
+                name="website"
+                position="after"
+            >
+
+                <field
+                    name="is_property_agent"
+                    widget="boolean_toggle"
+                />
+
+            </field>
+
+        </field>
+
     </record>
+
 </odoo>

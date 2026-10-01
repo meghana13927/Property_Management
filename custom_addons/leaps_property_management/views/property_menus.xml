@@ -1,75 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <odoo>
+
     <data>
-        <menuitem id="menu_property_root"
-            name="إدارة العقارات"
+
+        <!-- Root Menu -->
+        <menuitem
+            id="menu_property_root"
+            name="Property Management"
             sequence="55"
             action="action_property_dashboard"
-            web_icon="leaps_property_management,static/description/icon.png"/>
+            web_icon="leaps_property_management,static/description/icon.png"
+        />
 
-        <menuitem id="menu_property_properties"
-            name="العقارات"
+
+        <!-- Properties -->
+        <menuitem
+            id="menu_property_properties"
+            name="Properties"
             parent="menu_property_root"
-            sequence="10"/>
-        <menuitem id="menu_property_buildings"
-            name="المباني"
+            sequence="10"
+        />
+
+        <menuitem
+            id="menu_property_buildings"
+            name="Buildings"
             parent="menu_property_properties"
             action="action_property_building"
-            sequence="5"/>
-        <menuitem id="menu_property_units"
-            name="الوحدات العقارية"
+            sequence="5"
+        />
+
+        <menuitem
+            id="menu_property_units"
+            name="Property Units"
             parent="menu_property_properties"
             action="action_property_unit"
-            sequence="10"/>
+            sequence="10"
+        />
 
-        <menuitem id="menu_property_rental"
-            name="الإيجار"
+
+        <!-- Rental -->
+        <menuitem
+            id="menu_property_rental"
+            name="Rental"
             parent="menu_property_root"
-            sequence="20"/>
-        <menuitem id="menu_property_rental_contracts"
-            name="عقود الإيجار"
+            sequence="20"
+        />
+
+        <menuitem
+            id="menu_property_rental_contracts"
+            name="Rental Contracts"
             parent="menu_property_rental"
             action="action_rental_contract"
-            sequence="10"/>
+            sequence="10"
+        />
 
-        <menuitem id="menu_property_sales"
-            name="البيع"
+
+        <!-- Sales -->
+        <menuitem
+            id="menu_property_sales"
+            name="Sales"
             parent="menu_property_root"
-            sequence="30"/>
-        <menuitem id="menu_property_sales_contracts"
-            name="عقود البيع"
+            sequence="30"
+        />
+
+        <menuitem
+            id="menu_property_sales_contracts"
+            name="Sales Contracts"
             parent="menu_property_sales"
             action="action_sales_contract"
-            sequence="10"/>
+            sequence="10"
+        />
 
-        <menuitem id="menu_property_commissions_root"
-            name="العمولات"
+
+        <!-- Commissions -->
+        <menuitem
+            id="menu_property_commissions_root"
+            name="Commissions"
             parent="menu_property_root"
-            sequence="35"/>
-        <menuitem id="menu_property_commissions"
-            name="عمولات REGA والرسوم"
+            sequence="35"
+        />
+
+        <menuitem
+            id="menu_property_commissions"
+            name="REGA Commissions and Fees"
             parent="menu_property_commissions_root"
             action="action_property_commission"
-            sequence="10"/>
+            sequence="10"
+        />
 
-        <menuitem id="menu_property_maintenance"
-            name="الصيانة"
+
+        <!-- Maintenance -->
+        <menuitem
+            id="menu_property_maintenance"
+            name="Maintenance"
             parent="menu_property_root"
-            sequence="40"/>
-        <menuitem id="menu_property_maintenance_requests"
-            name="طلبات الصيانة"
+            sequence="40"
+        />
+
+        <menuitem
+            id="menu_property_maintenance_requests"
+            name="Maintenance Requests"
             parent="menu_property_maintenance"
             action="action_property_maintenance"
-            sequence="10"/>
+            sequence="10"
+        />
 
-        <menuitem id="menu_property_config"
-            name="الإعدادات"
+
+        <!-- Configuration -->
+        <menuitem
+            id="menu_property_config"
+            name="Settings"
             parent="menu_property_root"
-            sequence="90"/>
-        <menuitem id="menu_property_amenities"
-            name="المرافق والخدمات"
+            sequence="90"
+        />
+
+        <menuitem
+            id="menu_property_amenities"
+            name="Amenities and Services"
             parent="menu_property_config"
             action="action_property_amenity"
-            sequence="10"/>
+            sequence="10"
+        />
+
     </data>
+
 </odoo>
