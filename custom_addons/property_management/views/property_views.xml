@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- ============================== -->
+    <!-- PROPERTY LIST VIEW             -->
+    <!-- ============================== -->
+
+    <record id="view_property_list" model="ir.ui.view">
+        <field name="name">property.property.list</field>
+        <field name="model">property.property</field>
+
+        <field name="arch" type="xml">
+            <list string="Properties">
+
+                <field name="name"/>
+                <field name="landlord_id"/>
+                <field name="property_type"/>
+
+                <field
+                    name="tenant_count"
+                    string="Total Tenants"
+                />
+
+                <field
+                    name="active_tenant_count"
+                    string="Occupied"
+                />
+
+                <field
+                    name="total_monthly_rent"
+                    string="Total Monthly Rent"
+                />
+
+                <field name="status"/>
+
+            </list>
+        </field>
+    </record>
+
+
+    <!-- ============================== -->
+    <!-- PROPERTY FORM VIEW             -->
+    <!-- ============================== -->
+
+    <record id="view_property_form" model="ir.ui.view">
+        <field name="name">property.property.form</field>
+        <field name="model">property.property</field>
+
+        <field name="arch" type="xml">
+
+            <form string="Property">
+
+                <sheet>
+
+                    <!-- PROPERTY TITLE -->
+                    <div class="oe_title">
+                        <label for="name"/>
+
+                        <h1>
+                            <field
+                                name="name"
+                                placeholder="Property / Apartment Name"
+                            />
+                        </h1>
+                    </div>
+
+
+                    <!-- BASIC INFORMATION -->
+                    <group>
+
+                        <group string="Property Details">
+
+                            <field name="landlord_id"/>
+
+                            <field name="property_type"/>
+
+                            <field name="status"/>
+
+                        </group>
+
+
+                        <group string="Occupancy Summary">
+
+                            <field
+                                name="tenant_count"
+                                readonly="1"
+                            />
+
+                            <field
+                                name="active_tenant_count"
+                                readonly="1"
+                            />
+
+                            <field
+                                name="total_monthly_rent"
+                                readonly="1"
+                            />
+
+                        </group>
+
+                    </group>
+
+
+                    <!-- PROPERTY ADDRESS -->
+                    <group string="Property Address">
+
+                        <field
+                            name="address"
+                            placeholder="Enter property address..."
+                        />
+
+                    </group>
+
+
+                    <!-- ============================== -->
+                    <!-- NOTEBOOK                       -->
+                    <!-- ============================== -->
+
+                    <notebook>
+
+
+                        <!-- ============================== -->
+                        <!-- TENANTS TAB                    -->
+                        <!-- ============================== -->
+
+                        <page string="Tenants">
+
+                            <field name="tenant_ids">
+
+                                <list
+                                    string="Tenants"
+                                    editable="bottom"
+                                >
+
+                                    <field
+                                        name="name"
+                                        string="Tenant Name"
+                                    />
+
+                                    <field
+                                        name="house_number"
+                                        string="House / Unit"
+                                    />
+
+                                    <field
+                                        name="phone"
+                                        string="Mobile Number"
+                                    />
+
+                                    <field
+                                        name="move_in_date"
+                                        string="Move-in Date"
+                                    />
+
+                                    <field
+                                        name="monthly_rent"
+                                        string="Monthly Rent"
+                                    />
+
+                                    <field
+                                        name="deposit_amount"
+                                        string="Deposit Amount"
+                                    />
+
+                                    <field
+                                        name="status"
+                                        string="Occupancy Status"
+                                    />
+
+                                </list>
+
+
+                                <!-- Tenant form opened from line -->
+
+                                <form string="Tenant">
+
+                                    <group>
+
+                                        <group string="Tenant Information">
+
+                                            <field name="name"/>
+
+                                            <field name="phone"/>
+
+                                            <field name="email"/>
+
+                                            <field name="status"/>
+
+                                        </group>
+
+
+                                        <group string="Rental Information">
+
+                                            <field name="house_number"/>
+
+                                            <field name="monthly_rent"/>
+
+                                            <field name="deposit_amount"/>
+
+                                            <field name="move_in_date"/>
+
+                                        </group>
+
+                                    </group>
+
+
+                                    <group string="Agreement Details">
+
+                                        <group>
+
+                                            <field name="agreement_start_date"/>
+
+                                            <field name="agreement_end_date"/>
+
+                                        </group>
+
+                                    </group>
+
+
+                                    <group string="Permanent Address">
+
+                                        <field name="permanent_address"/>
+
+                                    </group>
+
+
+                                    <group string="Notes">
+
+                                        <field name="notes"/>
+
+                                    </group>
+
+                                </form>
+
+                            </field>
+
+                        </page>
+
+
+                        <!-- ============================== -->
+                        <!-- PROPERTY NOTES TAB             -->
+                        <!-- ============================== -->
+
+                        <page string="Notes">
+
+                            <field
+                                name="notes"
+                                placeholder="Property notes..."
+                            />
+
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+            </form>
+
+        </field>
+    </record>
+
+
+    <!-- ============================== -->
+    <!-- PROPERTY ACTION                -->
+    <!-- ============================== -->
+
+    <record id="action_property" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">property.property</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- ============================== -->
+    <!-- MENUS                          -->
+    <!-- ============================== -->
+
+    <menuitem
+        id="menu_property_management_root"
+        name="Property Management"
+        sequence="10"
+    />
+
+    <menuitem
+        id="menu_properties"
+        name="Properties"
+        parent="menu_property_management_root"
+        action="action_property"
+        sequence="10"
+    />
+
+</odoo>

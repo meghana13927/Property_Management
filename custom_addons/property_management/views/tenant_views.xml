@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="view_property_tenant_list" model="ir.ui.view">
+        <field name="name">property.tenant.list</field>
+        <field name="model">property.tenant</field>
+
+        <field name="arch" type="xml">
+            <list string="Tenants">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="property_id"/>
+                <field name="house_number"/>
+                <field name="monthly_rent"/>
+                <field name="deposit_amount"/>
+                <field name="move_in_date"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+
+    <record id="view_property_tenant_form" model="ir.ui.view">
+        <field name="name">property.tenant.form</field>
+        <field name="model">property.tenant</field>
+
+        <field name="arch" type="xml">
+            <form string="Tenant">
+
+                <sheet>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Tenant Name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+
+                        <group string="Tenant Information">
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="status"/>
+                        </group>
+
+                        <group string="Property Information">
+                            <field name="property_id"/>
+                            <field name="house_number"/>
+                            <field name="monthly_rent"/>
+                            <field name="deposit_amount"/>
+                        </group>
+
+                    </group>
+
+                    <notebook>
+
+                        <page string="Agreement">
+
+                            <group>
+                                <group>
+                                    <field name="move_in_date"/>
+                                    <field name="agreement_start_date"/>
+                                </group>
+
+                                <group>
+                                    <field name="agreement_end_date"/>
+                                </group>
+                            </group>
+
+                        </page>
+
+                        <page string="Permanent Address">
+                            <field name="permanent_address"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_property_tenant" model="ir.actions.act_window">
+        <field name="name">Tenants</field>
+        <field name="res_model">property.tenant</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <menuitem
+        id="menu_property_tenants"
+        name="Tenants"
+        parent="menu_property_management_root"
+        action="action_property_tenant"
+        sequence="20"
+    />
+
+</odoo>
